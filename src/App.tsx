@@ -1,14 +1,15 @@
 import {useEffect, useState} from 'react'
 import './App.css'
+import {Event} from "./types.ts";
 
 function App() {
     const [count, setCount] = useState(0)
-    const [data, setData] = useState(null);
+    const [data, setData] = useState<Event | null>(null);
 
     useEffect(() => {
         fetch('https://dhbw.radicalsimplicity.com/calendar/test/events/8257')
             .then(response => response.json())
-            .then(json => setData(json))
+            .then((json: Event) => setData(json))
             .catch(error => console.error(error));
     }, []);
 
@@ -20,7 +21,7 @@ function App() {
                 count is {count}
             </button>
             <div>
-                <pre>{data ? JSON.stringify(data, null, 2) : "Loading"}</pre>
+                <pre>Event: {data ? data.title : "Loading."}</pre>
             </div>
         </>
     )
