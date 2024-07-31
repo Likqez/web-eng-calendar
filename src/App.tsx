@@ -1,5 +1,5 @@
 import './App.css'
-import {Header} from "./header/components/Header.tsx";
+import Header from "./header/components/Header.tsx";
 import SidebarCalendar from "./sidebar/components/SidebarCalendar.tsx";
 import {useState} from "react";
 
