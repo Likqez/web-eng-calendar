@@ -1,11 +1,13 @@
 import './App.css'
-import {SidebarCalendar} from "./sidebar/components/Calendar.tsx";
+import {Header} from "./header/components/Header.tsx";
+import SidebarCalendar from "./sidebar/components/SidebarCalendar.tsx";
 
 function App() {
     // const date = new Date(2024, 7, 28);
     return (
         <>
-            <SidebarCalendar />
+            <Header/>
+            <SidebarCalendar/>
         </>
     )
 }

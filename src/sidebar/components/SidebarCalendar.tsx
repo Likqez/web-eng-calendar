@@ -1,41 +1,68 @@
-import '../styling/Calendar.css';
+import '../styling/SidebarCalendar.css';
+import {IoChevronBackSharp, IoChevronForwardSharp} from "react-icons/io5";
+import {useState} from "react";
 
 const DAY_OF_WEEK = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 const MONTH_OF_YEAR = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-export function SidebarCalendar() {
-    const todaysDate = new Date();
-    const displayDate = new Date(2024, 6, 1);
+const todaysDate = new Date();
 
-    // oshea-30.07.2024: Mucho scuffo
-    // oshea-30.07.2024
-    // Todo:
-    //  CHANGE THIS!!!!!!!!!!!!
+const SidebarCalendar = () => {
+    const [displayDate, setDisplaydateDate] = useState(new Date(2024, 6, 1));
+
+    // Function to change the displayed month
+    const goToNextMonth = () => {
+        setDisplaydateDate((prevDate) => {
+            const nextMonth = new Date(prevDate);
+            nextMonth.setMonth(nextMonth.getMonth() + 1);
+            return nextMonth;
+        });
+    };
+
+    const goToPreviousMonth = () => {
+        setDisplaydateDate((prevDate) => {
+            const prevMonth = new Date(prevDate);
+            prevMonth.setMonth(prevMonth.getMonth() - 1);
+            return prevMonth;
+        });
+    };
+
     const days = calcDisplayDaysInMonth(displayDate.getFullYear(), displayDate.getMonth());
     const htmlDays = [];
-    for (let i = 0; i < days.daysInPreviousMonth; i++) { htmlDays.push(NonDay(days.days[i])); }
+    for (let i = 0; i < days.daysInPreviousMonth; i++) {
+        htmlDays.push(NonDay(days.days[i]));
+    }
     for (let i = 0; i < days.daysInCurrentMonth; i++) {
         const date = days.days[days.daysInPreviousMonth + i];
-        if (isSameDate(todaysDate, new Date(displayDate.getFullYear(), displayDate.getMonth(), date)))  htmlDays.push(TodayDay());
-        else                                                                                            htmlDays.push(CurrDay(date));
+        if (isSameDate(todaysDate, new Date(displayDate.getFullYear(), displayDate.getMonth(), date))) htmlDays.push(TodayDay());
+        else htmlDays.push(CurrDay(date));
     }
-    for (let i = 0; i < days.daysInNextMonth; i++) { htmlDays.push(NonDay(days.days[days.daysInPreviousMonth + days.daysInCurrentMonth + i])); }
+    for (let i = 0; i < days.daysInNextMonth; i++) {
+        htmlDays.push(NonDay(days.days[days.daysInPreviousMonth + days.daysInCurrentMonth + i]));
+    }
 
     // Component
     return (
         <>
-            <div id="sidebar_calendar" className="h-96 w-80">
+            <div id="sidebar_calendar" className="h-96 w-80 mt-4">
                 {/* Header thingy */}
                 <div className="flex text-xl text-neutral-800">
                     <span className="ml-2"> {MONTH_OF_YEAR[displayDate.getMonth()]} {displayDate.getFullYear()} </span>
-                    <button id="previous_month" className="ml-auto mr-2"> &lt; </button>
-                    <button id="next_month" className="ml-1 mr-2"> &gt; </button>
+                    <button id="previous_month" className="ml-auto mr-2 has-tooltip" onClick={goToPreviousMonth}>
+                        <IoChevronBackSharp/>
+                        <span className='tooltip'>Prev. month</span>
+
+                    </button>
+                    <button id="next_month" className="ml-1 mr-2 has-tooltip" onClick={goToNextMonth}>
+                        <IoChevronForwardSharp/>
+                        <span className='tooltip'>Next month</span>
+                    </button>
                 </div>
 
                 {/* Days of the week */}
                 <div className="mt-1 w-full">
                     <div className="grid grid-cols-7 w-full px-2 border-b-2 text-center border-gray-400">
-                        {DAY_OF_WEEK.map(day => <span> {day} </span>)}
+                        {DAY_OF_WEEK.map(day => <span className="has-tooltip"> {day} <span className="tooltip">Wednesday my dudes</span> </span>)}
                     </div>
                 </div>
 
@@ -47,6 +74,8 @@ export function SidebarCalendar() {
         </>
     );
 }
+
+export default SidebarCalendar;
 
 function CurrDay(date: number) {
     return (

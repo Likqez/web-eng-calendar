@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.calendar_day {
+    @apply w-full;
+    @apply aspect-square;
+    @apply flex;
+    @apply justify-center;
+    @apply items-center;
+}
+
+.tooltip {
+    @apply invisible absolute;
+    @apply bg-gray-800;
+    @apply text-white;
+    @apply text-xs;
+    @apply p-1 rounded border border-gray-200 shadow-lg ml-4;
+}
+
+.has-tooltip:hover .tooltip {
+    @apply visible z-50
+}
