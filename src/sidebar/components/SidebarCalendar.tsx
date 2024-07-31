@@ -15,7 +15,6 @@ interface SidebarCalendarProps {
 const SidebarCalendar: FC<SidebarCalendarProps> = (state) => {
     const displayDate = new Date(state.date);
 
-    // TODO: Fix issue when current date is 31 but previous month has less days, it will not change the month?? further investigation needed
     const goToNextMonth = () => {
         displayDate.setMonth(displayDate.getMonth() + 1);
         state.onDateChange(displayDate); // Let parent component know to handle the state change
@@ -23,6 +22,9 @@ const SidebarCalendar: FC<SidebarCalendarProps> = (state) => {
 
     const goToPreviousMonth = () => {
         displayDate.setMonth(displayDate.getMonth() - 1);
+        if (displayDate.getDate() < state.date.getDate()) {
+            displayDate.setDate(0); // Set to the last day of the previous month
+        }
         state.onDateChange(displayDate); // Let parent component know to handle the state change
     };
 
@@ -70,6 +72,7 @@ const SidebarCalendar: FC<SidebarCalendarProps> = (state) => {
                     {htmlDays}
                 </div>
             </div>
+            {state.date.toDateString()}
         </>
     );
 }
