@@ -1,30 +1,29 @@
 import '../styling/SidebarCalendar.css';
 import {IoChevronBackSharp, IoChevronForwardSharp} from "react-icons/io5";
-import {useState} from "react";
+import {FC} from "react";
 
 const DAY_OF_WEEK = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 const MONTH_OF_YEAR = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const todaysDate = new Date();
 
-const SidebarCalendar = () => {
-    const [displayDate, setDisplaydateDate] = useState(new Date(2024, 6, 1));
+interface SidebarCalendarProps {
+    date: Date,
+    onDateChange: (date: Date) => void;
+}
 
-    // Function to change the displayed month
+const SidebarCalendar: FC<SidebarCalendarProps> = (state) => {
+    const displayDate = new Date(state.date);
+
+    // TODO: Fix issue when current date is 31 but previous month has less days, it will not change the month?? further investigation needed
     const goToNextMonth = () => {
-        setDisplaydateDate((prevDate) => {
-            const nextMonth = new Date(prevDate);
-            nextMonth.setMonth(nextMonth.getMonth() + 1);
-            return nextMonth;
-        });
+        displayDate.setMonth(displayDate.getMonth() + 1);
+        state.onDateChange(displayDate); // Let parent component know to handle the state change
     };
 
     const goToPreviousMonth = () => {
-        setDisplaydateDate((prevDate) => {
-            const prevMonth = new Date(prevDate);
-            prevMonth.setMonth(prevMonth.getMonth() - 1);
-            return prevMonth;
-        });
+        displayDate.setMonth(displayDate.getMonth() - 1);
+        state.onDateChange(displayDate); // Let parent component know to handle the state change
     };
 
     const days = calcDisplayDaysInMonth(displayDate.getFullYear(), displayDate.getMonth());
@@ -120,9 +119,15 @@ function calcDisplayDaysInMonth(year: number, month: number) {
 
     const days = [];
     // Add days of previous month
-    for (let i = daysLeftInPrevMonth; i > 0; i--) { days.push(daysInPreviousMonth - i + 1); }
-    for (let i = 1; i <= daysInDisplayMonth; i++) { days.push(i); }
-    for (let i = 1; i <= daysLeftInNextMonth; i++) { days.push(i); }
+    for (let i = daysLeftInPrevMonth; i > 0; i--) {
+        days.push(daysInPreviousMonth - i + 1);
+    }
+    for (let i = 1; i <= daysInDisplayMonth; i++) {
+        days.push(i);
+    }
+    for (let i = 1; i <= daysLeftInNextMonth; i++) {
+        days.push(i);
+    }
 
     return {
         daysInCurrentMonth: daysInDisplayMonth,
