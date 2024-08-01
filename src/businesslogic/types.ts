@@ -15,7 +15,7 @@ export type Event = {
     webpage: string | null; // optional, max 100 characters
     imageurl: string | null; // optional, URL to image
     categories: Category[]; // optional
-    extra: any; // optional, structure not defined, max length 2000 characters
+    extra: object | null; // optional, structure not defined, max length 2000 characters
 };
 
 // Example Response for retrieving all events
@@ -33,7 +33,7 @@ export type CreateEventRequest = {
     webpage?: string;
     imagedata?: string | "REMOVE";
     categories?: { id: number }[];
-    extra?: any;
+    extra?: object;
 };
 
 // Create Event Response
@@ -48,7 +48,7 @@ export type CreateEventResponse = {
     webpage: string | null;
     imageurl: string | null;
     categories: Category[];
-    extra: any;
+    extra: object;
 };
 
 // Retrieve Event by ID Response
