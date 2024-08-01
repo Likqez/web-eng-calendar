@@ -1,45 +1,66 @@
 import '../styling/SidebarCalendar.css';
 import {IoChevronBackSharp, IoChevronForwardSharp} from "react-icons/io5";
 import {FC} from "react";
+import SidebarCalendarEntry from "./SidebarCalendarEntry.tsx";
 
 const DAY_OF_WEEK = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 const MONTH_OF_YEAR = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-const todaysDate = new Date();
-
 interface SidebarCalendarProps {
-    date: Date,
-    onDateChange: (date: Date) => void;
+    displayDate: Date,
+    onDisplayDateChange: (date: Date) => void;
+    selectedDate: Date;
+    onDateSelected: (date: Date) => void;
 }
 
-const SidebarCalendar: FC<SidebarCalendarProps> = (state) => {
-    const displayDate = new Date(state.date);
+const SidebarCalendar: FC<SidebarCalendarProps> = (props) => {
+    const displayDate = new Date(props.displayDate);
 
     const goToNextMonth = () => {
         displayDate.setMonth(displayDate.getMonth() + 1);
-        state.onDateChange(displayDate); // Let parent component know to handle the state change
+        props.onDisplayDateChange(displayDate); // Let parent component know to handle the state change
     };
 
     const goToPreviousMonth = () => {
         displayDate.setMonth(displayDate.getMonth() - 1);
-        if (displayDate.getDate() < state.date.getDate()) {
+        if (displayDate.getDate() < props.displayDate.getDate()) {
             displayDate.setDate(0); // Set to the last day of the previous month
         }
-        state.onDateChange(displayDate); // Let parent component know to handle the state change
+        props.onDisplayDateChange(displayDate); // Let parent component know to handle the state change
+    };
+
+    const setNewSelectedDate = (date: Date) => {
+        displayDate.setDate(date.getDate());
+        displayDate.setMonth(date.getMonth());
+        displayDate.setFullYear(date.getFullYear());
+        props.onDisplayDateChange(displayDate);
+        props.onDateSelected(date);
     };
 
     const days = calcDisplayDaysInMonth(displayDate.getFullYear(), displayDate.getMonth());
     const htmlDays = [];
     for (let i = 0; i < days.daysInPreviousMonth; i++) {
-        htmlDays.push(NonDay(days.days[i]));
+        const date = new Date();
+        date.setMonth(displayDate.getMonth() - 1);
+        date.setDate(days.days[i]);
+        date.setFullYear(displayDate.getFullYear());
+        htmlDays.push(SidebarCalendarEntry({displayDate: displayDate, date: date, selectedDate: props.selectedDate, onClick: () => {setNewSelectedDate(date)} }));
     }
     for (let i = 0; i < days.daysInCurrentMonth; i++) {
-        const date = days.days[days.daysInPreviousMonth + i];
-        if (isSameDate(todaysDate, new Date(displayDate.getFullYear(), displayDate.getMonth(), date))) htmlDays.push(TodayDay());
-        else htmlDays.push(CurrDay(date));
+        const day = days.days[days.daysInPreviousMonth + i];
+        const date = new Date();
+        date.setMonth(displayDate.getMonth());
+        date.setDate(day);
+        date.setFullYear(displayDate.getFullYear());
+        htmlDays.push(SidebarCalendarEntry({displayDate: displayDate, date: date, selectedDate: props.selectedDate, onClick: () => {setNewSelectedDate(date)} }));
     }
     for (let i = 0; i < days.daysInNextMonth; i++) {
-        htmlDays.push(NonDay(days.days[days.daysInPreviousMonth + days.daysInCurrentMonth + i]));
+        const day = days.days[days.daysInPreviousMonth + days.daysInCurrentMonth + i];
+        const date = new Date();
+        date.setMonth(displayDate.getMonth() + 1);
+        date.setDate(day);
+        date.setFullYear(displayDate.getFullYear());
+        htmlDays.push(SidebarCalendarEntry({displayDate: displayDate, date: date, selectedDate: props.selectedDate, onClick: () => {setNewSelectedDate(date)} }));
     }
 
     // Component
@@ -78,34 +99,6 @@ const SidebarCalendar: FC<SidebarCalendarProps> = (state) => {
 
 export default SidebarCalendar;
 
-function CurrDay(date: number) {
-    return (
-        <>
-            <span className="calendar_day text-black"> {date} </span>
-        </>
-    );
-}
-
-function NonDay(date: number) {
-    return (
-        <>
-            <span className="calendar_day text-gray-500"> {date} </span>
-        </>
-    );
-}
-
-function TodayDay() {
-    return (
-        <>
-            <div>
-                <div className="w-full aspect-square rounded-full bg-blue-400">
-                    <span className="calendar_day text-black"> {new Date().getDate()} </span>
-                </div>
-            </div>
-        </>
-    );
-}
-
 // oshea-30.07.2024: This is going to be a pain, I already know it (18:20)
 // oshea-30.07.2024: Was actually pretty ok, did some scuffed things, but meh (19:00)
 function calcDisplayDaysInMonth(year: number, month: number) {
@@ -137,12 +130,4 @@ function calcDisplayDaysInMonth(year: number, month: number) {
         daysInNextMonth: daysLeftInNextMonth,
         days: days
     };
-}
-
-
-/**
- * Doesn't compare the actual time!
- */
-function isSameDate(o1: Date, o2: Date): boolean {
-    return o1.getFullYear() === o2.getFullYear() && o1.getMonth() === o2.getMonth() && o1.getDate() === o2.getDate();
 }

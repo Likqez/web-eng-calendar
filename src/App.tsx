@@ -9,7 +9,11 @@ function App() {
     return (
         <>
             <Header/>
-            <SidebarCalendar date={sideBarCalendarDate} onDateChange={setSideBarCalendarDate}/>
+            <SidebarCalendar displayDate={sideBarCalendarDate} onDisplayDateChange={setSideBarCalendarDate} selectedDate={calendarDate} onDateSelected={setCalendarDate}/>
+            <br/><br/><br/>
+            SelectedDate (Week to show) : {calendarDate.toDateString()}<br/>
+            sidebarDate (Month to show) : {sideBarCalendarDate.toDateString()}
+
         </>
     )
 }
