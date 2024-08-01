@@ -45,9 +45,9 @@ const SidebarCalendar: FC<SidebarCalendarProps> = (state) => {
     // Component
     return (
         <>
-            <div id="sidebar_calendar" className="h-96 w-80 mt-4">
+            <div id="sidebar_calendar" className="max-w-60 w-1/6 min-w-52 mt-4">
                 {/* Header thingy */}
-                <div className="flex text-xl text-neutral-800">
+                <div className="flex text-lg text-neutral-800 text-nowrap">
                     <span className="ml-2"> {MONTH_OF_YEAR[displayDate.getMonth()]} {displayDate.getFullYear()} </span>
                     <button id="previous_month" className="ml-auto mr-2 has-tooltip" onClick={goToPreviousMonth}>
                         <IoChevronBackSharp/>
@@ -72,7 +72,6 @@ const SidebarCalendar: FC<SidebarCalendarProps> = (state) => {
                     {htmlDays}
                 </div>
             </div>
-            {state.date.toDateString()}
         </>
     );
 }
