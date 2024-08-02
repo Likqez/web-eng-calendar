@@ -1,22 +1,14 @@
 import './App.css'
 import Header from "./header/components/Header.tsx";
-import SidebarCalendar from "./sidebar/components/SidebarCalendar.tsx";
-import {SidebarCalendarProps} from "./sidebar/components/SidebarCalendar.tsx";
 import {useEffect, useState} from "react";
 import {retrieveAllEvents} from "./businesslogic/CalendarAPI.ts";
 import {CalendarEvent, mapToEvent} from "./businesslogic/types.ts";
+import Sidebar from "./sidebar/components/Sidebar.tsx";
 
 function App() {
     const [calendarDate, setCalendarDate] = useState(new Date()) // State for the main calendar showing the weekly view
     const [sideBarCalendarDate, setSideBarCalendarDate] = useState(new Date()) // State for the sidebar calendar showing the monthly view
     const [sideBarCalendarVisible, setSideBarVisibility] = useState<boolean>(true)
-
-    const sidebarCalendarProp: SidebarCalendarProps = {
-        displayDate: calendarDate,
-        selectedDate: sideBarCalendarDate,
-        onDisplayDateChange: setCalendarDate,
-        onDateSelected: setSideBarCalendarDate,
-    }
 
     // State for the events
     const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -40,9 +32,13 @@ function App() {
 
     return (
         <>
-            <Header/>
-            <SidebarCalendar displayDate={sideBarCalendarDate} onDisplayDateChange={setSideBarCalendarDate}
-                             selectedDate={calendarDate} onDateSelected={setCalendarDate}/>
+            <Header visible={sideBarCalendarVisible} onMenuToggle={setSideBarVisibility} />
+            <Sidebar visible={sideBarCalendarVisible} sidebar={{
+                displayDate: calendarDate,
+                selectedDate: sideBarCalendarDate,
+                onDisplayDateChange: setCalendarDate,
+                onDateSelected: setSideBarCalendarDate,
+            }} />
             <br/><br/><br/>
             <h3 className="text-xl">Debug Info:</h3>
 
