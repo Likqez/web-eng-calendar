@@ -11,7 +11,6 @@ interface CalendarProps {
 
 const Calendar = (props: CalendarProps) => {
     const weekDates: Date[] = calcWeekDates(props.selectedDate);
-    console.log(filterEventsOfWeek(weekDates[3], props.events));
 
     return (
         <>
@@ -77,14 +76,31 @@ const Calendar = (props: CalendarProps) => {
                         <div id="calendar_events" className="grid grid-cols-7 h-full w-full absolute px-2">
                             {
                                 filterEventsOfWeek(weekDates[3], props.events)
-                                    .map(event => {
-                                        if (event === null) return <div></div>;
-                                        else return <CalendarEntry event={event}/>
-                                    })
+                                    .map(events =>
+                                        <CalendarEventSection dayEvents={events} />
+                                )
                             }
                         </div>
                     </div>
                 </div>
+            </div>
+        </>
+    );
+}
+
+interface EventSectionProp {
+            dayEvents: CalendarEvent[]; // Events for the day
+}
+
+const CalendarEventSection = (props: EventSectionProp) => {
+    return (
+        <>
+            <div className="flex flex-col w-full h-full relative">
+                {
+                    props.dayEvents.map((event) =>
+                        <CalendarEntry event={event} />
+                    )
+                }
             </div>
         </>
     );
@@ -106,22 +122,41 @@ function calcWeekDates(selectedDate: Date): Date[] {
 
 }
 
-function filterEventsOfWeek(middleDateOfWeek: Date, events: CalendarEvent[]): CalendarEvent[] {
+function filterEventsOfWeek(middleOfWeek: Date, events: CalendarEvent[]): CalendarEvent[][] {
     // oshea-02.08.2024: This is so cursed...
     // The idea is to take the difference between the middle of the week and the start of the event.
     // If the difference is small enough, it must be in the same week
 
-    const filtered = Array(7).fill(null);
+    const filtered: CalendarEvent[][] = [];
+    for (let i = 0; i < 7; i++) {
+        filtered.push(Array(0))
+    }
+
     events.filter((event) => {
-        return true;
+        // oshea-02.08.2024
+        // Todo:
+        //  This doesn't work correctly?
+        const time = Math.abs(middleOfWeek.getTime() - event.start.getTime());
+        const deltaDate = new Date(time).getDate();
+        return (deltaDate <= 3);
     }).forEach((event) => {
+        console.log(event);
         const day = event.start.getDay();
         const index = (day === 0) ? 6 : day - 1;
-        filtered[index] = event;
+        filtered[index].push(event);
     });
 
-    // const time = Math.abs(middleDateOfWeek.getTime() - event.start.getTime());
-    // const deltaDate = new Date(time).getDate();
-    // return (deltaDate == 5);    // oshea-02.08.2024: Why 5? idk
+    // Filter the events, so they are rendered correctly later
+    for (let i = 1; i < 7; i++) {
+        filtered[i].sort((a, b) => {
+            const aEventLength = (a.end.getTime() - a.start.getTime());
+            const bEventLength = (b.end.getTime() - b.start.getTime());
+
+            if (aEventLength < bEventLength) return 1;
+            else return -1;
+        });
+    }
+
+    console.log(filtered);
     return filtered;
 }
