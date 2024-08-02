@@ -1,7 +1,6 @@
 // Represents the whole sidebar
 
-import SidebarCalendar from "./SidebarCalendar.tsx";
-import {SidebarCalendarProps} from "./SidebarCalendar.tsx";
+import SidebarCalendar, {SidebarCalendarProps} from "./SidebarCalendar.tsx";
 import {IoAddSharp} from "react-icons/io5";
 import '../styling/Sidebar.css'
 import {FC} from "react";
@@ -14,7 +13,7 @@ interface SidebarProps {
 const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
     return (
         <>
-            <div id="sidebar" className="max-w-120 w-1/6 min-w-52 overflow-y-clip" style={props.visible ? {} : {display: "none"}}>
+            <div id="sidebar" className="max-w-120 w-1/6 min-w-52 overflow-y-hidden" style={props.visible ? {} : {display: "none"}}>
                 <div className="pr-6 pt-4 min-h-8 h-14 max-h-14">
                     <CreateButton/>
                 </div>

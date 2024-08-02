@@ -103,6 +103,7 @@ export default SidebarCalendar;
 
 // oshea-30.07.2024: This is going to be a pain, I already know it (18:20)
 // oshea-30.07.2024: Was actually pretty ok, did some scuffed things, but meh (19:00)
+// oshea-02.08.2024: You can make this way better, maybe "later"
 function calcDisplayDaysInMonth(year: number, month: number) {
     // This... this is bs
     const endOfDisplayMonth = new Date(year, month + 1, 0);
