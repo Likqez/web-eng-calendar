@@ -1,3 +1,4 @@
+// oshea-02.08.2024: Hamburger, cheeseburger, bigmac, whopper
 import {GiHamburgerMenu} from "react-icons/gi";
 import {IoSettingsSharp} from "react-icons/io5";
 
@@ -12,7 +13,7 @@ const Header = () => {
                 <IoSettingsSharp className="flex-none fill-black py-2 w-fit h-full ml-auto mr-2 my-auto"/>
 
                 {/* "User icon" only really used for fun stuff :) */}
-                <img alt="user profile" title="Klick for the funnies :)" src="../../../public/goose_funnies.jpeg"
+                <img alt="user profile" title="Click for the funnies :)" src="../../../public/goose_funnies.jpeg"
                      className="flex-none w-10 h-10 rounded-full mr-2 my-2"
 
                 />

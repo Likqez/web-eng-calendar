@@ -8,8 +8,8 @@ export type Event = {
     title: string; // mandatory, max 50 characters
     location: string | null; // optional, max 50 characters
     organizer: string; // mandatory, max 50 characters, valid email
-    start: string; // mandatory, supported formats: yyyy-MM-dd'T'HH:mm, yyyy-MM-dd'T'HH:mm:ss'Z', yyyy-MM-dd'T'HH:mm:ss.mmm'Z'
-    end: string; // mandatory, supported formats: yyyy-MM-dd'T'HH:mm, yyyy-MM-dd'T'HH:mm:ss'Z', yyyy-MM-dd'T'HH:mm:ss.mmm'Z'
+    start: string; // mandatory, supported formats: yyyy-MM-dd'T'HH:mm, yyyy-MM-dd'T'HH:mm:ss'Z'
+    end: string; // mandatory, supported formats: yyyy-MM-dd'T'HH:mm, yyyy-MM-dd'T'HH:mm:ss'Z'
     status: "Free" | "Busy" | "Tentative"; // mandatory
     allday: boolean; // optional, defaults to false
     webpage: string | null; // optional, max 100 characters

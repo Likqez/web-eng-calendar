@@ -37,32 +37,6 @@ const SidebarCalendar: FC<SidebarCalendarProps> = (props) => {
         props.onDateSelected(date);
     };
 
-    const days = calcDisplayDaysInMonth(displayDate.getFullYear(), displayDate.getMonth());
-    const htmlDays = [];
-    for (let i = 0; i < days.daysInPreviousMonth; i++) {
-        const date = new Date();
-        date.setMonth(displayDate.getMonth() - 1);
-        date.setDate(days.days[i]);
-        date.setFullYear(displayDate.getFullYear());
-        htmlDays.push(SidebarCalendarEntry({displayDate: displayDate, date: date, selectedDate: props.selectedDate, onClick: () => {setNewSelectedDate(date)} }));
-    }
-    for (let i = 0; i < days.daysInCurrentMonth; i++) {
-        const day = days.days[days.daysInPreviousMonth + i];
-        const date = new Date();
-        date.setMonth(displayDate.getMonth());
-        date.setDate(day);
-        date.setFullYear(displayDate.getFullYear());
-        htmlDays.push(SidebarCalendarEntry({displayDate: displayDate, date: date, selectedDate: props.selectedDate, onClick: () => {setNewSelectedDate(date)} }));
-    }
-    for (let i = 0; i < days.daysInNextMonth; i++) {
-        const day = days.days[days.daysInPreviousMonth + days.daysInCurrentMonth + i];
-        const date = new Date();
-        date.setMonth(displayDate.getMonth() + 1);
-        date.setDate(day);
-        date.setFullYear(displayDate.getFullYear());
-        htmlDays.push(SidebarCalendarEntry({displayDate: displayDate, date: date, selectedDate: props.selectedDate, onClick: () => {setNewSelectedDate(date)} }));
-    }
-
     // Component
     return (
         <>
@@ -90,7 +64,15 @@ const SidebarCalendar: FC<SidebarCalendarProps> = (props) => {
 
                 {/* Days of month */}
                 <div className="grid grid-cols-7 auto-rows-auto mt-1 w-full px-2 text-center align-middle">
-                    {htmlDays}
+                    {
+                        calcDisplayDaysInMonth(displayDate.getFullYear(), displayDate.getMonth())
+                            .map((d) => SidebarCalendarEntry({
+                                displayDate: displayDate,
+                                date: d,
+                                selectedDate: props.selectedDate,
+                                onClick: () => {setNewSelectedDate(d)}
+                            }))
+                    }
                 </div>
             </div>
         </>
@@ -103,8 +85,18 @@ export default SidebarCalendar;
 // oshea-30.07.2024: Was actually pretty ok, did some scuffed things, but meh (19:00)
 function calcDisplayDaysInMonth(year: number, month: number) {
     // This... this is bs
-    const daysInDisplayMonth = new Date(year, month + 1, 0).getDate();
-    const daysInPreviousMonth = new Date(year, month, 0).getDate();
+    const endOfDisplayMonth = new Date(year, month + 1, 0);
+    const endOfPreviousMonth = new Date(year, month, 0);
+    const endOfNextMonth = new Date(year, month + 2, 0);
+
+    const daysInDisplayMonth = endOfDisplayMonth.getDate();
+    const daysInPreviousMonth = endOfPreviousMonth.getDate();
+
+    const yearOfPreviousMonth = endOfPreviousMonth.getFullYear();
+    const yearOfNextMonth = endOfNextMonth.getFullYear();
+
+    const previousMonth = endOfPreviousMonth.getMonth();
+    const nextMonth = endOfNextMonth.getMonth();
 
     const startDayOfMonth = new Date(year, month, 1).getDay(); // WHY DO YOU START WITH SUNDAY, REEEEEE
     const endDayOfMonth = new Date(year, month, daysInDisplayMonth).getDay();
@@ -112,22 +104,17 @@ function calcDisplayDaysInMonth(year: number, month: number) {
     const daysLeftInPrevMonth = (startDayOfMonth === 0) ? 6 : startDayOfMonth - 1;
     const daysLeftInNextMonth = (endDayOfMonth === 0) ? 0 : 7 - endDayOfMonth;
 
-    const days = [];
+    const dates: [Date] = [];
     // Add days of previous month
     for (let i = daysLeftInPrevMonth; i > 0; i--) {
-        days.push(daysInPreviousMonth - i + 1);
+        dates.push(new Date(yearOfPreviousMonth, previousMonth, daysInPreviousMonth - i + 1));
     }
     for (let i = 1; i <= daysInDisplayMonth; i++) {
-        days.push(i);
+        dates.push(new Date(year, month, i));
     }
     for (let i = 1; i <= daysLeftInNextMonth; i++) {
-        days.push(i);
+        dates.push(new Date(yearOfNextMonth, nextMonth, i));
     }
 
-    return {
-        daysInCurrentMonth: daysInDisplayMonth,
-        daysInPreviousMonth: daysLeftInPrevMonth,
-        daysInNextMonth: daysLeftInNextMonth,
-        days: days
-    };
+    return dates;
 }
