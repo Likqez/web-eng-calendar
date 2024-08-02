@@ -12,21 +12,17 @@ interface SidebarProps {
 }
 
 const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
-
-
     return (
         <>
-            <div className={(props.visible) ? "visible" : "hidden"}>
-                <div id="sidebar" className="max-w-120 w-1/6 min-w-52 overflow-y-clip">
-                    <div className="pl-2 pr-6 pt-4 min-h-8 h-14 max-h-14">
-                        <CreateButton/>
-                    </div>
-                    <div className="pt-4 flex justify-center">
-                        <SidebarCalendar displayDate={props.sidebar.displayDate}
-                                         selectedDate={props.sidebar.selectedDate}
-                                         onDateSelected={props.sidebar.onDateSelected}
-                                         onDisplayDateChange={props.sidebar.onDisplayDateChange}/>
-                    </div>
+            <div id="sidebar" className="max-w-120 w-1/6 min-w-52 overflow-y-clip" style={props.visible ? {} : {display: "none"}}>
+                <div className="pr-6 pt-4 min-h-8 h-14 max-h-14">
+                    <CreateButton/>
+                </div>
+                <div className="pt-8 flex justify-center">
+                    <SidebarCalendar displayDate={props.sidebar.displayDate}
+                                     selectedDate={props.sidebar.selectedDate}
+                                     onDateSelected={props.sidebar.onDateSelected}
+                                     onDisplayDateChange={props.sidebar.onDisplayDateChange}/>
                 </div>
             </div>
         </>
@@ -36,7 +32,8 @@ const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
 const CreateButton = () => {
     return (
         <>
-            <div id="side_create_button" className="flex w-fit h-full has-tooltip rounded-3xl drop-shadow-lg py-1 bg-white">
+            <div id="side_create_button"
+                 className="flex w-fit h-full has-tooltip rounded-3xl drop-shadow-lg py-1 bg-white">
                 <div className="aspect-square w-10">
                     <IoAddSharp className="pl-2 w-full h-full"/>
                 </div>

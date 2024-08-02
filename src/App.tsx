@@ -32,22 +32,20 @@ function App() {
 
     return (
         <>
-            <Header visible={sideBarCalendarVisible} onMenuToggle={setSideBarVisibility} />
-            <Sidebar visible={sideBarCalendarVisible} sidebar={{
-                displayDate: calendarDate,
-                selectedDate: sideBarCalendarDate,
-                onDisplayDateChange: setCalendarDate,
-                onDateSelected: setSideBarCalendarDate,
-            }} />
-            <br/><br/><br/>
-            <h3 className="text-xl">Debug Info:</h3>
+            <Header visible={sideBarCalendarVisible} onMenuToggle={setSideBarVisibility}/>
 
-            SelectedDate (Week to show) : {calendarDate.toDateString()}<br/>
-            sidebarDate (Month to show) : {sideBarCalendarDate.toDateString()}
+            <div className="calendar_body">
+                <div className="px-2">
+                    <Sidebar visible={sideBarCalendarVisible} sidebar={{
+                        displayDate: calendarDate,
+                        selectedDate: sideBarCalendarDate,
+                        onDisplayDateChange: setCalendarDate,
+                        onDateSelected: setSideBarCalendarDate,
+                    }}/>
+                </div>
 
-            <br/> <br/>
-            {loading && <div>Loading...</div>}
-            {error && <div className="text-red-700">Error: {error}</div>}
+                <div className="w-full h-full bg-amber-950"></div>
+            </div>
         </>
     )
 }
