@@ -13,7 +13,7 @@ class EventRequestBuilder {
     private allday: boolean = false;
     private webpage?: string;
     private imagedata?: string | "REMOVE";
-    private categories?: number[];
+    private categories?: number[] = [];
     private extra?: any;
 
     setTitle(title: string): EventRequestBuilder {
@@ -46,11 +46,13 @@ class EventRequestBuilder {
         return this;
     }
 
-    setAllday(): EventRequestBuilder {
-        this.allday = true;
-        this.start.setHours(0, 0);
-        this.end = new Date(this.start);
-        this.end.setHours(23, 59);
+    setAllday(allday: boolean): EventRequestBuilder {
+        if (allday) {
+            this.start.setHours(0, 0);
+            this.end = new Date(this.start);
+            this.end.setHours(23, 59);
+        }
+        this.allday = allday;
         return this;
     }
 
@@ -104,7 +106,7 @@ class EventRequestBuilder {
             allday: this.allday,
             webpage: this.webpage,
             imagedata: this.imagedata,
-            categories: this.categories.map(id => ({id})),
+            categories: this.categories ? this.categories.map(id => ({id})) : [],
             extra: this.extra
         };
     }

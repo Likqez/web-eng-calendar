@@ -3,31 +3,28 @@ export type Category = {
     name: string; // max 30 characters
 };
 
-export type Event = {
+export type CalendarEvent = {
     id: number;
-    title: string; // mandatory, max 50 characters
-    location: string | null; // optional, max 50 characters
-    organizer: string; // mandatory, max 50 characters, valid email
-    start: string; // mandatory, supported formats: yyyy-MM-dd'T'HH:mm, yyyy-MM-dd'T'HH:mm:ss'Z'
-    end: string; // mandatory, supported formats: yyyy-MM-dd'T'HH:mm, yyyy-MM-dd'T'HH:mm:ss'Z'
-    status: "Free" | "Busy" | "Tentative"; // mandatory
-    allday: boolean; // optional, defaults to false
-    webpage: string | null; // optional, max 100 characters
-    imageurl: string | null; // optional, URL to image
-    categories: Category[]; // optional
-    extra: object | null; // optional, structure not defined, max length 2000 characters
+    title: string;
+    location?: string;
+    organizer: string;
+    start: Date;
+    end: Date;
+    status: "Free" | "Busy" | "Tentative";
+    allday?: boolean;
+    webpage?: string;
+    imageurl?: string;
+    categories?: Category[];
+    extra?: object;
 };
-
-// Example Response for retrieving all events
-export type RetrieveAllEventsResponse = Event[];
 
 // Create Event Request
 export type CreateEventRequest = {
     title: string;
     location?: string;
     organizer: string;
-    start: string;
-    end: string;
+    start: string; //supported formats: yyyy-MM-dd'T'HH:mm, yyyy-MM-dd'T'HH:mm:ss'Z', yyyy-MM-dd'T'HH:mm:ss.mmm'Z'
+    end: string; //supported formats: yyyy-MM-dd'T'HH:mm, yyyy-MM-dd'T'HH:mm:ss'Z', yyyy-MM-dd'T'HH:mm:ss.mmm'Z'
     status: "Free" | "Busy" | "Tentative";
     allday?: boolean;
     webpage?: string;
@@ -52,7 +49,20 @@ export type CreateEventResponse = {
 };
 
 // Retrieve Event by ID Response
-export type RetrieveEventResponse = Event;
+export type RetrieveEventResponse = {
+    id: number;
+    title: string; // mandatory, max 50 characters
+    location: string | null; // optional, max 50 characters
+    organizer: string; // mandatory, max 50 characters, valid email
+    start: string; // mandatory, supported formats: yyyy-MM-dd'T'HH:mm, yyyy-MM-dd'T'HH:mm:ss'Z', yyyy-MM-dd'T'HH:mm:ss.mmm'Z'
+    end: string; // mandatory, supported formats: yyyy-MM-dd'T'HH:mm, yyyy-MM-dd'T'HH:mm:ss'Z', yyyy-MM-dd'T'HH:mm:ss.mmm'Z'
+    status: "Free" | "Busy" | "Tentative"; // mandatory
+    allday: boolean; // optional, defaults to false
+    webpage: string | null; // optional, max 100 characters
+    imageurl: string | null; // optional, URL to image
+    categories: Category[]; // optional
+    extra: object | null; // optional, structure not defined, max length 2000 characters
+};
 
 // Update Event Request (same as CreateEventRequest)
 export type UpdateEventRequest = CreateEventRequest;
@@ -99,3 +109,21 @@ export type AddImageToEventResponse = void;
 
 // Remove Image from Event Response (no response body)
 export type RemoveImageFromEventResponse = void;
+
+// Mapper
+export const mapToEvent = (event: RetrieveEventResponse): CalendarEvent => {
+    return {
+        id: event.id,
+        title: event.title,
+        location: event.location,
+        organizer: event.organizer,
+        start: new Date(event.start),
+        end: new Date(event.end),
+        status: event.status,
+        allday: event.allday,
+        webpage: event.webpage,
+        imageurl: event.imageurl,
+        categories: event.categories,
+        extra: event.extra
+    };
+}
