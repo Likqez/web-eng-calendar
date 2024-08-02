@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#side_create_button {
+    filter: drop-shadow(0 2px 2px #888888);
+}

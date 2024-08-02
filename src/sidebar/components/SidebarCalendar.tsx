@@ -10,7 +10,7 @@ const DAYS_OF_WEEK: DayEntry[] = [
     { short: 'T', long: "Thursday" },
     { short: 'F', long: "Friday" },
     { short: 'S', long: "Saturday" },
-    { short: 'S', long: "Sunday "}
+    { short: 'S', long: "Sunday" }
 ]
 const MONTH_OF_YEAR = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -19,7 +19,7 @@ interface DayEntry {
     long: string
 }
 
-interface SidebarCalendarProps {
+export interface SidebarCalendarProps {
     displayDate: Date,
     onDisplayDateChange: (date: Date) => void;
     selectedDate: Date;
@@ -53,7 +53,7 @@ const SidebarCalendar: FC<SidebarCalendarProps> = (props) => {
     // Component
     return (
         <>
-            <div id="sidebar_calendar" className="max-w-60 w-1/6 min-w-52 mt-4">
+            <div id="sidebar_calendar" className="w-full">
                 {/* Header thingy */}
                 <div className="flex text-lg text-neutral-800 text-nowrap">
                     <span className="ml-2"> {MONTH_OF_YEAR[displayDate.getMonth()]} {displayDate.getFullYear()} </span>
