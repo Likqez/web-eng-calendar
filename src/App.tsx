@@ -1,19 +1,48 @@
 import './App.css'
 import Header from "./header/components/Header.tsx";
 import SidebarCalendar from "./sidebar/components/SidebarCalendar.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {retrieveAllEvents} from "./businesslogic/CalendarAPI.ts";
+import {CalendarEvent, mapToEvent} from "./businesslogic/types.ts";
 
 function App() {
     const [calendarDate, setCalendarDate] = useState(new Date()) // State for the main calendar showing the weekly view
     const [sideBarCalendarDate, setSideBarCalendarDate] = useState(new Date()) // State for the sidebar calendar showing the monthly view
+
+    // State for the events
+    const [events, setEvents] = useState<CalendarEvent[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const retrievedEvents = await retrieveAllEvents();
+                setEvents(retrievedEvents.map(mapToEvent));
+            } catch (err) {
+                setError("Failed to retrieve events");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchEvents();
+    }, []);
+
     return (
         <>
             <Header/>
-            <SidebarCalendar displayDate={sideBarCalendarDate} onDisplayDateChange={setSideBarCalendarDate} selectedDate={calendarDate} onDateSelected={setCalendarDate}/>
+            <SidebarCalendar displayDate={sideBarCalendarDate} onDisplayDateChange={setSideBarCalendarDate}
+                             selectedDate={calendarDate} onDateSelected={setCalendarDate}/>
             <br/><br/><br/>
+            <h3 className="text-xl">Debug Info:</h3>
+
             SelectedDate (Week to show) : {calendarDate.toDateString()}<br/>
             sidebarDate (Month to show) : {sideBarCalendarDate.toDateString()}
 
+            <br/> <br/>
+            {loading && <div>Loading...</div>}
+            {error && <div className="text-red-700">Error: {error}</div>}
         </>
     )
 }
