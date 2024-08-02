@@ -3,8 +3,21 @@ import {IoChevronBackSharp, IoChevronForwardSharp} from "react-icons/io5";
 import {FC} from "react";
 import SidebarCalendarEntry from "./SidebarCalendarEntry.tsx";
 
-const DAY_OF_WEEK = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+const DAYS_OF_WEEK: DayEntry[] = [
+    { short: 'M', long: "Monday" },
+    { short: 'T', long: "Tuesday" },
+    { short: 'W', long: "It's Wednesday my dudes" },
+    { short: 'T', long: "Thursday" },
+    { short: 'F', long: "Friday" },
+    { short: 'S', long: "Saturday" },
+    { short: 'S', long: "Sunday "}
+]
 const MONTH_OF_YEAR = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+interface DayEntry {
+    short: string,
+    long: string
+}
 
 interface SidebarCalendarProps {
     displayDate: Date,
@@ -58,7 +71,14 @@ const SidebarCalendar: FC<SidebarCalendarProps> = (props) => {
                 {/* Days of the week */}
                 <div className="mt-1 w-full">
                     <div className="grid grid-cols-7 w-full px-2 border-b-2 text-center border-gray-400">
-                        {DAY_OF_WEEK.map(day => <span className="has-tooltip"> {day} <span className="tooltip">Wednesday my dudes</span> </span>)}
+                        {
+                            DAYS_OF_WEEK
+                                .map((entry) =>
+                                    <span className="has-tooltip"> {entry.short}
+                                        <span className="tooltip"> {entry.long} </span>
+                                    </span>
+                                )
+                        }
                     </div>
                 </div>
 
@@ -104,7 +124,7 @@ function calcDisplayDaysInMonth(year: number, month: number) {
     const daysLeftInPrevMonth = (startDayOfMonth === 0) ? 6 : startDayOfMonth - 1;
     const daysLeftInNextMonth = (endDayOfMonth === 0) ? 0 : 7 - endDayOfMonth;
 
-    const dates: [Date] = [];
+    const dates = [];
     // Add days of previous month
     for (let i = daysLeftInPrevMonth; i > 0; i--) {
         dates.push(new Date(yearOfPreviousMonth, previousMonth, daysInPreviousMonth - i + 1));
