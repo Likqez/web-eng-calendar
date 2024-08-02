@@ -33,10 +33,10 @@ function App() {
 
     return (
         <>
-            <div>
+            <div className="flex flex-col">
                 <Header visible={sideBarCalendarVisible} onMenuToggle={setSideBarVisibility}/>
 
-                <div className="calendar_body">
+                <div className="calendar_body grow">
                     <div className="px-2">
                         <Sidebar visible={sideBarCalendarVisible} sidebar={{
                             displayDate: calendarDate,
