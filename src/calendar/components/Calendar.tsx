@@ -21,7 +21,7 @@ const Calendar = (props: CalendarProps) => {
 
                     {/* Days and Dates header */}
                     <div className="grid grid-rows-2 h-fit border-b border-gray-400 pb-1 mx-2">
-                        <div className="grid grid-cols-7 w-full px-2 pt-3 text-center">
+                        <div className="grid grid-cols-7 w-full px-2 pt-3 text-center min-w-72">
                             {DAYS.map((day) => <span> {day} </span>)}
                         </div>
                         <div className="grid grid-cols-7 w-full px-2 pt-3 text-center">
@@ -40,7 +40,7 @@ const Calendar = (props: CalendarProps) => {
                         {
                             Array.from(Array(24).keys())
                                 .map((hour) =>
-                                        <span className="h-20 inline-block align-text-bottom">
+                                        <span className="h-20 inline-block align-text-bottom text-sm">
                                     {(hour === 0) ?
                                         "" :
                                         ((hour < 12) ? (hour % 12) + " AM" : ((hour === 12) ? 12 : (hour % 12)) + " PM")    // oshea-02.08.2024: WHY IS 12PM A THING, AAAAAAAHHHHHHHHHHHHHHH
@@ -53,7 +53,7 @@ const Calendar = (props: CalendarProps) => {
                     {/* Event stuff */}
                     <div id="calendar_grid" className="relative pt-5 mx-2">
                         {/* Horizontal lines */}
-                        <div id="calendar_horizontal" className="grid grid-rows-24 absolute h-full w-full px-2">
+                        <div id="calendar_horizontal" className="grid grid-rows-24 absolute h-full w-full px-2 min-w-72">
                             {
                                 Array.from(Array(24).keys())
                                     .map(_ =>
@@ -63,7 +63,7 @@ const Calendar = (props: CalendarProps) => {
                         </div>
 
                         {/* Vertical lines */}
-                        <div id="calendar_vertical" className="grid grid-cols-7 h-full w-full absolute px-2">
+                        <div id="calendar_vertical" className="grid grid-cols-7 h-full w-full absolute px-2 min-w-72">
                             {
                                 Array.from(Array(7).keys())
                                     .map(_ =>
@@ -73,7 +73,7 @@ const Calendar = (props: CalendarProps) => {
                         </div>
 
                         {/* Actual Events */}
-                        <div id="calendar_events" className="grid grid-cols-7 h-full w-full absolute px-2">
+                        <div id="calendar_events" className="grid grid-cols-7 h-full w-full absolute px-2 min-w-72">
                             {
                                 filterEventsOfWeek(weekDates[3], props.events)
                                     .map(events =>
