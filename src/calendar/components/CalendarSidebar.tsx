@@ -2,7 +2,7 @@
 const CalendarSidebar = () => {
     return (
         <>
-            <div id="calendar_sidebar" className="grid grid-rows-24 w-32 pl-6 pt-3 bg-slate-400">
+            <div id="calendar_sidebar" className="grid grid-rows-24 w-12 pl-6 pt-2">
                 {
                     Array.from(Array(24).keys())
                         .map((hour) =>

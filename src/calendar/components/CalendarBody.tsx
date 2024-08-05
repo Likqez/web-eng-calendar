@@ -15,7 +15,7 @@ const CalendarBody = (props: BodyProp) => {
                 <CalendarSidebar />
                 <div className="relative mx-2 pt-2 w-full">
                     <CalendarVisualGrid />
-                    <CalendarEventOverlay events={props.events} weekDates={props.weekDates} />
+                    {/* <CalendarEventOverlay events={props.events} weekDates={props.weekDates} /> */ }
                 </div>
             </div>
         </>

@@ -52,9 +52,7 @@ function App() {
                             onClickCreateEntry={createEventModal}
                         />
                     </div>
-                    <div className="w-full overflow-x-hidden overflow-y-scroll">
-                        <Calendar selectedDate={calendarDate} events={events} />
-                    </div>
+                    <Calendar selectedDate={calendarDate} events={events} />
                 </div>
             </div>
         </>

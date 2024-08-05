@@ -1,13 +1,9 @@
 
-.calendar_grid {
-    display: grid;
-    grid-template-columns: 0.08fr 1.8fr;
-    grid-template-rows: 0.3fr;
-    gap: 0px 0px;
-    grid-template-areas:
-    ". .";
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
 }
 
-.calendar_grid > * {
-    min-width: 4rem;
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }

@@ -14,9 +14,11 @@ const Calendar = (props: CalendarProps) => {
 
     return (
         <>
-            <div id="calendar" className="flex flex-col w-full pt-2">
+            <div id="calendar" className="flex flex-col w-full pt-2 overflow-hidden">
                 <CalendarHeader weekDates={weekDates} />
-                <CalendarBody weekDates={weekDates} events={props.events} />
+                <div className="overflow-y-scroll scrollbar-hide mb-6">
+                    <CalendarBody weekDates={weekDates} events={props.events} />
+                </div>
             </div>
         </>
     );
