@@ -3,6 +3,7 @@
 // can contain props for the date to save it and access when clicked.
 
 import {FC} from "react";
+import { isSameDate } from "../../App";
 
 interface SidebarCalendarEntryProps {
     onClick: () => void
@@ -38,10 +39,6 @@ const SidebarCalendarEntry: FC<SidebarCalendarEntryProps> = (props) => {
             </button>
         </>
     );
-}
-
-function isSameDate(o1: Date, o2: Date): boolean {
-    return o1.getFullYear() === o2.getFullYear() && o1.getMonth() === o2.getMonth() && o1.getDate() === o2.getDate();
 }
 
 export default SidebarCalendarEntry;

@@ -1,11 +1,15 @@
+import { isSameDate } from "../../App";
 
 const DAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
 interface HeaderProp {
     weekDates: Date[];
+    selectedDate: Date;
 }
 
 const CalendarHeader = (props: HeaderProp) => {
+    const { weekDates, selectedDate } = props;
+
     return (
         <>
             <div className="ml-12">
@@ -15,8 +19,8 @@ const CalendarHeader = (props: HeaderProp) => {
                     </div>
                     <div className="grid grid-cols-7 px-2 pt-3 text-center">
                         {
-                            props.weekDates.map((day) =>
-                                <span className="text-2xl"> {day.getDate()} </span>
+                            weekDates.map((day) =>
+                                <WeekDay date={day} selectedDate={selectedDate} />
                             )
                         }
                     </div>
@@ -24,6 +28,39 @@ const CalendarHeader = (props: HeaderProp) => {
             </div>
         </>
     )
+}
+
+interface WeekDayProp {
+    date: Date;
+    selectedDate: Date;
+}
+
+const WeekDay = (props: WeekDayProp) => {
+    const { date, selectedDate } = props;
+
+    const isToday = isSameDate(date, new Date());
+    const isSelected = isSameDate(selectedDate, date);
+
+    return (
+        <>
+            <div>
+                <div className={`rounded-full hover:bg-blue-100 
+                ${isSelected ? "bg-blue-300 hover:bg-blue-400" : ""}
+                ${isToday ? "bg-blue-500 hover:bg-blue-600" : ""}
+                `}>
+
+                    <div className={`calendar_day
+                    "text-black"
+                    ${isSelected ? "text-blue-700" : ""}
+                    ${isToday ? "text-white" : ""}
+                    `}>
+                        {date.getDate()}
+                    </div>
+                </div>
+
+            </div>
+        </>
+    );
 }
 
 export default CalendarHeader;
