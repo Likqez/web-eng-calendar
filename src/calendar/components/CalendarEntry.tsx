@@ -16,15 +16,26 @@ const CalendarEntry = (props: CalendarEntryProp) => {
     return (
         <>
             <div id={`event-${props.event.id}`}
-                 className={"w-full absolute"}
+                 className="w-full flex flex-col pl-2 absolute"
                  style={{
                      height: `${pxHeight}px`,
                      marginTop: `${startHeight}px`,
                      backgroundColor: `#${intToRGB(hashStr(xorshift32amx(props.event.id).toString()))}` // oshea-02.08.2024: For that spicy random stuff
                  }}>
+                    <span className="text-xl truncate"> {props.event.title} </span>
+                    <span> {calcTime(props.event.start)} - {calcTime(props.event.end)} </span>
+                    {
+                        (props.event.location) ? <span> {props.event.location} </span> : <> </>
+                    }
             </div>
         </>
     );
+}
+
+function calcTime(date: Date): string {
+    const h: string = date.getHours().toString();
+    const m: string = date.getMinutes().toString();
+    return ("00".substring(0, 2 - h.length) + h) + ":" + ("00".substring(0, 2 - m.length) + m);
 }
 
 function intToRGB(hash: number) {
