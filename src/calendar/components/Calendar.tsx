@@ -36,7 +36,7 @@ const Calendar = (props: CalendarProps) => {
 
                 <div id="calendar_body" className="calendar_grid overflow-hidden pb-8">
                     {/* Times */}
-                    <div className="grid grid-rows-24 pl-2 pt-2">
+                    <div className="grid grid-rows-24 pl-6 pt-3">
                         {
                             Array.from(Array(24).keys())
                                 .map((hour) =>

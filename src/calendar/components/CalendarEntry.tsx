@@ -22,10 +22,14 @@ const CalendarEntry = (props: CalendarEntryProp) => {
                      marginTop: `${startHeight}px`,
                      backgroundColor: `#${intToRGB(hashStr(xorshift32amx(props.event.id).toString()))}` // oshea-02.08.2024: For that spicy random stuff
                  }}>
-                    <span className="text-xl truncate"> {props.event.title} </span>
-                    <span> {calcTime(props.event.start)} - {calcTime(props.event.end)} </span>
+                    <span className="line-clamp-1 text-xl truncate">
+                        {props.event.title}
+                    </span>
+                    <span className="line-clamp-1">
+                        {calcTime(props.event.start)} - {calcTime(props.event.end)}
+                    </span>
                     {
-                        (props.event.location) ? <span> {props.event.location} </span> : <> </>
+                        (props.event.location) ? <span className="line-clamp-1"> {props.event.location} </span> : <> </>
                     }
             </div>
         </>

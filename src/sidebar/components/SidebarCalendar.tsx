@@ -1,4 +1,3 @@
-import '../styling/SidebarCalendar.css';
 import {IoChevronBackSharp, IoChevronForwardSharp} from "react-icons/io5";
 import {FC} from "react";
 import SidebarCalendarEntry from "./SidebarCalendarEntry.tsx";

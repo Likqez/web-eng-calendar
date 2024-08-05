@@ -2,7 +2,6 @@
 
 import SidebarCalendar, {SidebarCalendarProps} from "./SidebarCalendar.tsx";
 import {IoAddSharp} from "react-icons/io5";
-import '../styling/Sidebar.css'
 import {FC} from "react";
 
 const Sidebar: FC<SidebarCalendarProps> = (props: SidebarCalendarProps) => {
