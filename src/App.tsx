@@ -32,11 +32,11 @@ function App() {
 
     return (
         <>
-            <div className="flex flex-col">
+            <div className="flex flex-col h-svh">
                 <Header />
 
-                <div className="calendar_body grow">
-                    <div className="px-2">
+                <div className="flex flex-row w-screen overflow-auto">
+                    <div className="flex-col basis-32 shrink-0 px-2">
                         <Sidebar
                             displayDate={sideBarCalendarDate}
                             selectedDate={calendarDate}
@@ -44,8 +44,9 @@ function App() {
                             onDateSelected={setCalendarDate}
                         />
                     </div>
-
-                    <Calendar selectedDate={calendarDate} events={events} />
+                    <div className="w-full overflow-x-hidden overflow-scroll">
+                        <Calendar selectedDate={calendarDate} events={events} />
+                    </div>
                 </div>
             </div>
         </>

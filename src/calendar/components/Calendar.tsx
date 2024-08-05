@@ -34,7 +34,7 @@ const Calendar = (props: CalendarProps) => {
                     </div>
                 </div>
 
-                <div id="calendar_body" className="calendar_grid overflow-y-scroll">
+                <div id="calendar_body" className="calendar_grid overflow-hidden pb-8">
                     {/* Times */}
                     <div className="grid grid-rows-24 pl-2 pt-2">
                         {
