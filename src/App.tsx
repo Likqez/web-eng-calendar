@@ -9,7 +9,6 @@ import Calendar from "./calendar/components/Calendar.tsx";
 function App() {
     const [calendarDate, setCalendarDate] = useState(new Date()) // State for the main calendar showing the weekly view
     const [sideBarCalendarDate, setSideBarCalendarDate] = useState(new Date()) // State for the sidebar calendar showing the monthly view
-    const [sideBarCalendarVisible, setSideBarVisibility] = useState<boolean>(true)
 
     // State for the events
     const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -34,16 +33,16 @@ function App() {
     return (
         <>
             <div className="flex flex-col">
-                <Header visible={sideBarCalendarVisible} onMenuToggle={setSideBarVisibility}/>
+                <Header />
 
                 <div className="calendar_body grow">
                     <div className="px-2">
-                        <Sidebar visible={sideBarCalendarVisible} sidebar={{
-                            displayDate: sideBarCalendarDate,
-                            selectedDate: calendarDate,
-                            onDisplayDateChange: setSideBarCalendarDate,
-                            onDateSelected: setCalendarDate,
-                        }}/>
+                        <Sidebar
+                            displayDate={sideBarCalendarDate}
+                            selectedDate={calendarDate}
+                            onDisplayDateChange={setSideBarCalendarDate}
+                            onDateSelected={setCalendarDate}
+                        />
                     </div>
 
                     <Calendar selectedDate={calendarDate} events={events} />
