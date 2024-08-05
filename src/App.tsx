@@ -39,10 +39,10 @@ function App() {
                 <div className="calendar_body grow">
                     <div className="px-2">
                         <Sidebar visible={sideBarCalendarVisible} sidebar={{
-                            displayDate: calendarDate,
-                            selectedDate: sideBarCalendarDate,
-                            onDisplayDateChange: setCalendarDate,
-                            onDateSelected: setSideBarCalendarDate,
+                            displayDate: sideBarCalendarDate,
+                            selectedDate: calendarDate,
+                            onDisplayDateChange: setSideBarCalendarDate,
+                            onDateSelected: setCalendarDate,
                         }}/>
                     </div>
 
