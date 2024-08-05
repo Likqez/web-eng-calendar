@@ -1,19 +1,17 @@
 import {CalendarEvent} from "../../businesslogic/types.ts";
 
+const ENTRY_HEIGHT = 80.5;    // Height of a single horizontal "entry" in the calendar
+const PX_PER_MINUTE = (ENTRY_HEIGHT / 60);
+
 interface CalendarEntryProp {
     event: CalendarEvent;
 }
 
 const CalendarEntry = (props: CalendarEntryProp) => {
-    const pxPerMin = /* document.getElementById("calendar_horizontal").children[0].clientHeight / 60; */ 1.33333;
     const dayStartDate = new Date(props.event.start);
     dayStartDate.setHours(0, 0, 0, 0);
-    const pxBeforeHeight = /*((props.event.start.getTime() - dayStartDate.getTime()) / 60000) * pxPerMin*/ 80;
-    const pxHeight = ((props.event.end.getTime() - props.event.start.getTime()) / 60000) * pxPerMin;
-    // console.log(((props.event.start.getTime() - dayStartDate.getTime()) / 60000) + " mins before");
-    // console.log(((props.event.end.getTime() - props.event.start.getTime()) / 60000) + " mins");
-    // console.log(pxPerMin);
-    // console.log(pxHeight);
+    const pxHeight = ((props.event.end.getTime() - props.event.start.getTime()) / 60_000) * PX_PER_MINUTE;
+    const startHeight = ((props.event.start.getTime() - dayStartDate.getTime()) / 60_000) * PX_PER_MINUTE;
 
     return (
         <>
@@ -21,7 +19,7 @@ const CalendarEntry = (props: CalendarEntryProp) => {
                  className={"w-full absolute"}
                  style={{
                      height: `${pxHeight}px`,
-                     marginTop: `${pxBeforeHeight}px`,
+                     marginTop: `${startHeight}px`,
                      backgroundColor: `#${intToRGB(hashStr(xorshift32amx(props.event.id).toString()))}` // oshea-02.08.2024: For that spicy random stuff
                  }}>
             </div>
