@@ -5,7 +5,8 @@ import CalendarBody from './CalendarBody.tsx';
 
 interface CalendarProps {
     events: CalendarEvent[];
-    selectedDate: Date
+    selectedDate: Date,
+    // onClickCreateEntry: () => void // Was also for additional create button
 }
 
 const Calendar = (props: CalendarProps) => {

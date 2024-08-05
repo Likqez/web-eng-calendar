@@ -30,6 +30,11 @@ function App() {
         fetchEvents();
     }, []);
 
+
+    const createEventModal = () => {
+        console.log("clicked!")
+    }
+
     return (
         <>
             <div className="flex flex-col h-svh">
@@ -38,10 +43,13 @@ function App() {
                 <div className="flex flex-row w-screen overflow-auto">
                     <div className="flex-col basis-32 shrink-0 px-2">
                         <Sidebar
-                            displayDate={sideBarCalendarDate}
-                            selectedDate={calendarDate}
-                            onDisplayDateChange={setSideBarCalendarDate}
-                            onDateSelected={setCalendarDate}
+                            sidebar={{
+                                displayDate: sideBarCalendarDate,
+                                selectedDate: calendarDate,
+                                onDisplayDateChange: setSideBarCalendarDate,
+                                onDateSelected: setCalendarDate,
+                            }}
+                            onClickCreateEntry={createEventModal}
                         />
                     </div>
                     <div className="w-full overflow-x-hidden overflow-y-scroll">
