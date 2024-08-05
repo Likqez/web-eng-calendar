@@ -6,7 +6,8 @@ const DAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
 interface CalendarProps {
     events: CalendarEvent[];
-    selectedDate: Date
+    selectedDate: Date,
+    // onClickCreateEntry: () => void // Was also for additional create button
 }
 
 const Calendar = (props: CalendarProps) => {
@@ -17,7 +18,17 @@ const Calendar = (props: CalendarProps) => {
             <div id="calendar" className="w-full pt-2">
                 <div id="calendar_header" className="calendar_grid z-10">
                     {/* Empty entry for the first grid entry */}
-                    <div></div>
+                    <div>
+                        {/*TODO REMOVE: was additional create button for when sidebar was not visible*/}
+                        {/*{!props.sidebarVisible ?*/}
+                        {/*    <button onClick={props.onClickCreateEntry} className="has-tooltip text-sm rounded-full mt-3 border border-gray-400"*/}
+                        {/*            disabled={props.sidebarVisible}>*/}
+                        {/*        <IoAddOutline className="text-4xl"/>*/}
+                        {/*        <span className="tooltip"> Create new event </span>*/}
+                        {/*    </button>*/}
+                        {/*    : ""}*/}
+
+                    </div>
 
                     {/* Days and Dates header */}
                     <div className="grid grid-rows-2 h-fit border-b border-gray-400 pb-1 mx-2">
