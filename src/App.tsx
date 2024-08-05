@@ -1,10 +1,11 @@
 import './App.css'
 import Header from "./header/components/Header.tsx";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {retrieveAllEvents} from "./businesslogic/CalendarAPI.ts";
 import {CalendarEvent, mapToEvent} from "./businesslogic/types.ts";
 import Sidebar from "./sidebar/components/Sidebar.tsx";
 import Calendar from "./calendar/components/Calendar.tsx";
+import Modal from "./sidebar/components/EventModal.tsx";
 
 function App() {
     const [calendarDate, setCalendarDate] = useState(new Date()) // State for the main calendar showing the weekly view
@@ -15,6 +16,10 @@ function App() {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+
+    // Fetch events on initial load
     useEffect(() => {
         const fetchEvents = async () => {
             try {
@@ -31,14 +36,27 @@ function App() {
     }, []);
 
 
-    const createEventModal = () => {
-        console.log("clicked!")
+    const openModal = (event: CalendarEvent) => {
+        if (event) {
+            setSelectedEvent(event);
+        } else {
+            setSelectedEvent(null);
+        }
+        setIsModalOpen(true);
     }
+    const closeModal = () => setIsModalOpen(false);
+
+    // Modal Form submit
+    const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        // Handle form submission logic here
+        closeModal();
+    };
 
     return (
         <>
             <div className="flex flex-col h-svh">
-                <Header />
+                <Header/>
 
                 <div className="flex flex-row w-screen overflow-auto">
                     <div className="flex-col basis-32 shrink-0 px-2">
@@ -49,12 +67,13 @@ function App() {
                                 onDisplayDateChange: setSideBarCalendarDate,
                                 onDateSelected: setCalendarDate,
                             }}
-                            onClickCreateEntry={createEventModal}
+                            onClickCreateEntry={openModal}
                         />
                     </div>
-                    <Calendar selectedDate={calendarDate} events={events} />
+                    <Calendar selectedDate={calendarDate} events={events}/>
                 </div>
             </div>
+            {isModalOpen && <Modal onClose={closeModal} onSubmit={handleFormSubmit}/>}
         </>
     )
 }
