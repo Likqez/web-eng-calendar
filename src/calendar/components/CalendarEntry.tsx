@@ -42,7 +42,7 @@ function calcTime(date: Date): string {
     return ("00".substring(0, 2 - h.length) + h) + ":" + ("00".substring(0, 2 - m.length) + m);
 }
 
-function intToRGB(hash: number) {
+export function intToRGB(hash: number) {
     const c = (hash & 0x00FFFFFF)
         .toString(16)
         .toUpperCase();
@@ -52,7 +52,7 @@ function intToRGB(hash: number) {
 
 // Was too lazy to implement the hasing myself
 // https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
-function hashStr(str: string): number {
+export function hashStr(str: string): number {
     let hash = 0, i, chr;
     if (str.length === 0) return hash;
     for (i = 0; i < str.length; i++) {
@@ -64,7 +64,7 @@ function hashStr(str: string): number {
 }
 
 // https://github.com/bryc/code/blob/master/jshash/PRNGs.md
-function xorshift32amx(a: number): number {
+export function xorshift32amx(a: number): number {
     let t = Math.imul(a, 1597334677);
     t = t >>> 24 | t >>> 8 & 65280 | t << 8 & 16711680 | t << 24; // reverse byte order
     a ^= a << 13;

@@ -1,11 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {
     IoAtOutline, IoBriefcaseOutline,
     IoCloseSharp, IoEarthOutline,
-    IoLocationOutline, IoTimeOutline
+    IoLocationOutline, IoTimeOutline, IoTrashOutline
 } from "react-icons/io5";
 import {CalendarEvent} from "../../businesslogic/types.ts";
 import {EMAIL_REGEX} from "../../businesslogic/EventRequestBuilder.ts";
+import {hashStr, intToRGB, xorshift32amx} from "../../calendar/components/CalendarEntry.tsx";
 
 interface ModalProps {
     onClose: () => void;
@@ -29,6 +30,11 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
 
     // Add state for validation errors
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+    const imageInputRef = React.createRef<HTMLInputElement>();
+
+    // Memoize the header color
+    const headerColor = useMemo(() => intToRGB(hashStr(xorshift32amx(event ? event.id : Math.random()*100).toString())), []);
 
     // Validation function
     const validate = () => {
@@ -58,6 +64,19 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
         }
     }, [event]);
 
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                onClose();
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [onClose]);
+
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -71,13 +90,22 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-3 rounded shadow-lg relative" // set modal size here
-                 style={{maxHeight: 'calc(100vh - 50px)', overflowY: 'auto', width: '36%'}}>
+            <div className="bg-white p-3 rounded shadow-lg relative w-[512px]"
+                 style={{maxHeight: 'calc(100vh - 50px)', overflowY: 'auto'}}>
                 <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl">
                     <IoCloseSharp/>
                 </button>
+
+                <div className="w-full h-24 rounded"
+                     style={{backgroundColor: imageurl ? 'transparent' : `#${headerColor}`}}>
+                    {imageurl && imageurl !== "REMOVE" && (
+                        <img src={imageurl} alt="Image" className="h-full w-full object-cover rounded"/>
+                    )}
+                </div>
+                <div className="mb-2 w-full h-0 border-b border-gray-300"></div>
+
                 <form onSubmit={onSubmit}>
-                    <div className="mb-4">
+                    <div className="mb-5">
                         <div className="flex justify-start">
                             <div className="pr-10 max-w-10"></div>
                             <input
@@ -87,55 +115,60 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                                 required={true}
                                 maxLength={50}
                                 onChange={(e) => setTitle(e.target.value)}
-                                className="text-xl w-full px-3 py-2 border-b-2 border-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
+                                className="text-xl w-full px-3 py-2 border-b-2 border-gray-300 focus:outline-none hover:bg-gray-100 focus:border-b-blue-500 transition duration-200"
                             />
                         </div>
                     </div>
 
-                    <div className="mb-4">
+                    <div className="mb-3">
                         <div className="flex justify-start items-center">
                             <div className="max-w-10 w-full align-text-bottom text-2xl pr-10"><IoTimeOutline/></div>
 
-                            <div id="time" className="flex w-full items-center justify-between text-sm">
-                                <input
-                                    type="date"
-                                    required={true}
-                                    value={start}
-                                    onChange={(e) => setStart(e.target.value)}
-                                    className="max-w-full px-1 mr-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
-                                />
+                            <div id="time" className="flex w-full items-center justify-start text-sm">
+                                <div className="flex items-center justify-start">
+                                    <input
+                                        type="date"
+                                        required={true}
+                                        value={start}
+                                        onChange={(e) => setStart(e.target.value)}
+                                        className="max-w-full px-1 mr-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
+                                    />
 
-                                <input
-                                    type="time"
-                                    required={true}
-                                    hidden={allday}
-                                    value={startTime}
-                                    onChange={(e) => setStartTime(e.target.value)}
-                                    className="px-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
-                                />
-                                <span className="px-4">until</span>
+                                    <input
+                                        type="time"
+                                        required={true}
+                                        hidden={allday}
+                                        value={startTime}
+                                        onChange={(e) => setStartTime(e.target.value)}
+                                        className="px-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
+                                    />
+                                </div>
+                                <span className="px-1">-</span>
 
-                                <input
-                                    type="time"
-                                    hidden={allday}
-                                    required={true}
-                                    value={endTime}
-                                    onChange={(e) => setEndTime(e.target.value)}
-                                    className="px-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
-                                />
-                                <input
-                                    type="date"
-                                    required={true}
-                                    value={end}
-                                    onChange={(e) => setEnd(e.target.value)}
-                                    className="max-w-full px-1 ml-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
-                                />
+                                <div className="flex items-center justify-start">
+                                    <input
+                                        type="time"
+                                        hidden={allday}
+                                        required={true}
+                                        value={endTime}
+                                        onChange={(e) => setEndTime(e.target.value)}
+                                        className="px-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
+                                    />
+                                    <input
+                                        type="date"
+                                        required={true}
+                                        value={end}
+                                        onChange={(e) => setEnd(e.target.value)}
+                                        className="max-w-full px-1 ml-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
+                                    />
+                                </div>
+
                             </div>
 
                         </div>
                     </div>
 
-                    <div className="mb-4">
+                    <div className="mb-3">
                         <div className="flex justify-center">
                             <div className="pr-10 max-w-10"></div>
                             <input
@@ -154,82 +187,89 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                         </div>
                     </div>
 
-                    {/*Organizer*/}
-                    <div className="mb-4">
+                    {/*Organizer & Status*/}
+                    <div className="mb-3">
                         <div className="flex justify-start items-center">
-                            <div className="max-w-10 w-full align-text-bottom text-2xl"><IoAtOutline /></div>
+                            <div className="max-w-10 w-full align-text-bottom text-2xl"><IoAtOutline/></div>
                             <input
                                 type="email"
                                 required={true}
                                 value={organizer}
-                                placeholder={'Enter Organizer Email'}
+                                placeholder={'Organizer Email'}
                                 maxLength={50}
                                 onChange={(e) => setOrganizer(e.target.value)}
-                                className={`text-sm w-full px-3 py-2 border-b-2 border-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200 ${errors.organizer ? 'border-red-400' : ''}`}
+                                className={`text-sm px-3 w-full py-2 border-b-2 border-gray-300 hover:bg-gray-100 focus:outline-none focus:border-b-blue-500 transition duration-200 ${errors.organizer ? 'border-red-400' : ''}`}
                             />
                             {/*TODO: Validate like this?*/}
                             {errors.organizer && <p className="text-red-500 text-sm">{errors.organizer}</p>}
-                        </div>
 
-                    </div>
-
-                    {/*Location*/}
-                    <div className="mb-4">
-                        <div className="flex items-center justify-start">
-                            <div className="max-w-10 w-full text-2xl"><IoLocationOutline/></div>
-                            <input
-                                type="text"
-                                value={location}
-                                placeholder={'Enter Location'}
-                                maxLength={50}
-                                onChange={(e) => setLocation(e.target.value)}
-                                className={`text-sm w-full px-3 focus:py-2 ${location ? 'py-2 border-b-2 border-gray-300' : ''} focus:border-b-2 focus:outline-none focus:border-b-blue-500 transition duration-200`}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="mb-4">
-                        <div className="flex items-center justify-start">
-                            <div className="max-w-10 w-full align-text-bottom text-2xl"><IoBriefcaseOutline /></div>
+                            <div className="ml-3 max-w-10 w-full align-text-bottom text-2xl"><IoBriefcaseOutline/></div>
                             <select
                                 value={status}
                                 required={true}
                                 onChange={(e) => setStatus(e.target.value)}
-                                className="text-sm w-fit px-3 py-2 border-b-2 border-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
+                                className="text-sm w-2/3 px-3 py-2 border-b-2 border-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
                             >
                                 <option value="Free">Free</option>
                                 <option value="Tentative">Tentative</option>
                                 <option value="Busy">Busy</option>
                             </select>
                         </div>
-
                     </div>
 
-                    <div className="mb-4">
+                    <div className="mt-6 mb-1 w-full h-0 border-b border-gray-300"></div>
+
+                    {/*Location*/}
+                    <div className="mb-1">
+                        <div className="flex items-center justify-start">
+                            <div className="max-w-10 w-full text-2xl"><IoLocationOutline/></div>
+                            <input
+                                type="text"
+                                value={location}
+                                placeholder={'Location'}
+                                maxLength={50}
+                                onChange={(e) => setLocation(e.target.value)}
+                                className={`text-sm w-full px-3 focus:py-2 ${location ? 'py-2' : ''} hover:bg-gray-100 focus:border-b-2 focus:outline-none focus:border-b-blue-500 transition duration-200`}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="mb-1">
                         <div className="flex justify-start items-center">
                             <div className="max-w-10 w-full align-text-bottom text-2xl"><IoEarthOutline/></div>
                             <input
                                 type="text"
                                 value={webpage}
                                 maxLength={100}
-                                placeholder='Enter URL'
+                                placeholder='Website'
                                 onChange={(e) => setWebpage(e.target.value)}
-                                className={`w-full px-3 focus:py-2 ${location ? 'py-2 border-gray-300 border-b-2' : ''} focus:border-b-2 focus:outline-none focus:border-b-blue-500 transition duration-200`}
+                                className={`text-sm w-full px-3 focus:py-2 ${webpage ? 'py-2' : ''} hover:bg-gray-100 focus:border-b-2 focus:outline-none focus:border-b-blue-500 transition duration-200`}
                             />
                         </div>
                     </div>
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Image</label>
+
+                    <div className="mb-2 w-full h-0 border-b border-gray-300"></div>
+
+                    <div className="mb-2 flex items-center justify-between">
+                        <label className="block text-gray-700">Header:</label>
                         <input
+                            ref={imageInputRef}
                             type="file"
                             onChange={handleImageChange}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                            className="w-2/3 px-3 py-2 focus:outline-none transition duration-200"
                         />
-                        {imageurl && (
-                            <img src={imageurl} alt="Image" className="mt-2 max-h-96"/>
-                        )}
+                        <button onClick={() => {
+                            setImageurl('');
+                            if (imageInputRef.current)
+                                imageInputRef.current.value = '';
+                            else (setImageurl('REMOVE'))
+
+                        }} className="p-2 text-red-500 hover:text-red-300 transition duration-200 text-2xl"
+                        >
+                            <IoTrashOutline/>
+                        </button>
                     </div>
-                    {/*<div className="mb-4">*/}
+                    {/*<div className="mb-2">*/}
                     {/*    <label className="block text-gray-700">Categories</label>*/}
                     {/*    <input*/}
                     {/*        type="text"*/}
@@ -238,6 +278,8 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                     {/*        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"*/}
                     {/*    />*/}
                     {/*</div>*/}
+
+                    <div className="mb-2 w-full h-0 border-b border-gray-300"></div>
                     <div className="flex justify-end">
                         <button
                             type="button"
