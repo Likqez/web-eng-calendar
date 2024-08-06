@@ -5,8 +5,7 @@ import {
     IoLocationOutline, IoTimeOutline, IoTrashOutline
 } from "react-icons/io5";
 import {CalendarEvent} from "../../businesslogic/types.ts";
-import {EMAIL_REGEX} from "../../businesslogic/EventRequestBuilder.ts";
-import {hashStr, intToRGB, xorshift32amx} from "../../calendar/components/CalendarEntry.tsx";
+import {generateUniqueHexColor} from "../../businesslogic/util/ColorGenerationUtil.ts";
 
 interface ModalProps {
     onClose: () => void;
@@ -28,26 +27,11 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
     const [imageurl, setImageurl] = useState(event?.imageurl || '');
     const [categories, setCategories] = useState(event?.categories || []);
 
-    // Add state for validation errors
-    const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
     const imageInputRef = React.createRef<HTMLInputElement>();
 
     // Memoize the header color
-    const headerColor = useMemo(() => intToRGB(hashStr(xorshift32amx(event ? event.id : Math.random()*100).toString())), []);
-
-    // Validation function
-    const validate = () => {
-        const newErrors: { [key: string]: string } = {};
-        if (!title || title.length > 50) newErrors.title = "Title is required and must be less than 50 characters.";
-        if (location && location.length > 50) newErrors.location = "Location must be less than 50 characters.";
-        if (!organizer || EMAIL_REGEX.test(organizer)) newErrors.organizer = "Organizer must be a valid email.";
-        if (!start) newErrors.start = "Start date and time are required.";
-        if (!end) newErrors.end = "End date and time are required.";
-        if (webpage && webpage.length > 100) newErrors.webpage = "Webpage must be less than 100 characters.";
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
+    const headerColor = useMemo(() => generateUniqueHexColor(event ? event.id : Math.random()*100), [event]);
+    console.log(headerColor);
 
     useEffect(() => {
         if (event) {
@@ -97,14 +81,17 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                 </button>
 
                 <div className="w-full h-24 rounded"
-                     style={{backgroundColor: imageurl ? 'transparent' : `#${headerColor}`}}>
+                     style={{backgroundColor: imageurl ? 'transparent' : `${headerColor}`}}>
                     {imageurl && imageurl !== "REMOVE" && (
                         <img src={imageurl} alt="Image" className="h-full w-full object-cover rounded"/>
                     )}
                 </div>
                 <div className="mb-2 w-full h-0 border-b border-gray-300"></div>
 
-                <form onSubmit={onSubmit}>
+                <form onSubmit={submitEvent=> {
+                    submitEvent.preventDefault();
+                    onSubmit(submitEvent);
+                }}>
                     <div className="mb-5">
                         <div className="flex justify-start">
                             <div className="pr-10 max-w-10"></div>
@@ -198,10 +185,8 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                                 placeholder={'Organizer Email'}
                                 maxLength={50}
                                 onChange={(e) => setOrganizer(e.target.value)}
-                                className={`text-sm px-3 w-full py-2 border-b-2 border-gray-300 hover:bg-gray-100 focus:outline-none focus:border-b-blue-500 transition duration-200 ${errors.organizer ? 'border-red-400' : ''}`}
+                                className={`text-sm px-3 w-full py-2 border-b-2 border-gray-300 hover:bg-gray-100 focus:outline-none focus:border-b-blue-500 transition duration-200`}
                             />
-                            {/*TODO: Validate like this?*/}
-                            {errors.organizer && <p className="text-red-500 text-sm">{errors.organizer}</p>}
 
                             <div className="ml-3 max-w-10 w-full align-text-bottom text-2xl"><IoBriefcaseOutline/></div>
                             <select
