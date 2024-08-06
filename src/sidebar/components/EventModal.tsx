@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {
     IoAtOutline, IoBriefcaseOutline,
-    IoCloseSharp,
-    IoLocationOutline,
-    IoTimeOutline
+    IoCloseSharp, IoEarthOutline,
+    IoLocationOutline, IoTimeOutline
 } from "react-icons/io5";
 import {CalendarEvent} from "../../businesslogic/types.ts";
 import {EMAIL_REGEX} from "../../businesslogic/EventRequestBuilder.ts";
@@ -72,7 +71,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-fit relative" // set modal size here
+            <div className="bg-white p-3 rounded-lg shadow-lg w-2/5 relative" // set modal size here
                  style={{maxHeight: 'calc(100vh - 50px)', overflowY: 'auto'}}>
                 <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl">
                     <IoCloseSharp/>
@@ -95,20 +94,21 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
 
                     <div className="mb-4">
                         <div className="flex justify-start items-center">
-                            <div className="max-w-10 w-full align-text-bottom text-3xl pr-10"><IoTimeOutline/></div>
+                            <div className="max-w-10 w-full align-text-bottom text-2xl pr-10"><IoTimeOutline/></div>
 
-                            <div id="time" className="flex w-full items-center justify-evenly text-sm">
+                            <div id="time" className="flex w-full items-center justify-between text-sm">
                                 <input
                                     type="date"
                                     required={true}
                                     value={start}
                                     onChange={(e) => setStart(e.target.value)}
-                                    className="w-full px-2 mr-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
+                                    className="max-w-full px-1 mr-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
                                 />
 
                                 <input
                                     type="time"
                                     required={true}
+                                    hidden={allday}
                                     value={startTime}
                                     onChange={(e) => setStartTime(e.target.value)}
                                     className="px-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
@@ -117,6 +117,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
 
                                 <input
                                     type="time"
+                                    hidden={allday}
                                     required={true}
                                     value={endTime}
                                     onChange={(e) => setEndTime(e.target.value)}
@@ -127,7 +128,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                                     required={true}
                                     value={end}
                                     onChange={(e) => setEnd(e.target.value)}
-                                    className="w-full px-2 ml-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
+                                    className="max-w-full px-1 ml-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
                                 />
                             </div>
 
@@ -156,9 +157,9 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                     {/*Organizer*/}
                     <div className="mb-4">
                         <div className="flex justify-start items-center">
-                            <div className="max-w-10 w-full align-text-bottom text-3xl"><IoAtOutline /></div>
+                            <div className="max-w-10 w-full align-text-bottom text-2xl"><IoAtOutline /></div>
                             <input
-                                type="text"
+                                type="email"
                                 required={true}
                                 value={organizer}
                                 placeholder={'Enter Organizer Email'}
@@ -175,23 +176,21 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                     {/*Location*/}
                     <div className="mb-4">
                         <div className="flex items-center justify-start">
-                            <div className="max-w-10 w-full text-3xl"><IoLocationOutline/></div>
+                            <div className="max-w-10 w-full text-2xl"><IoLocationOutline/></div>
                             <input
                                 type="text"
                                 value={location}
                                 placeholder={'Enter Location'}
                                 maxLength={50}
                                 onChange={(e) => setLocation(e.target.value)}
-                                className={`text-sm w-full px-3 focus:py-2 ${location ? 'py-2' : ''} focus:border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200`}
+                                className={`text-sm w-full px-3 focus:py-2 ${location ? 'py-2 border-b-2 border-gray-300' : ''} focus:border-b-2 focus:outline-none focus:border-b-blue-500 transition duration-200`}
                             />
                         </div>
                     </div>
 
                     <div className="mb-4">
                         <div className="flex items-center justify-start">
-                            <div className="max-w-10 w-full align-text-bottom text-3xl">
-                                <IoBriefcaseOutline />
-                            </div>
+                            <div className="max-w-10 w-full align-text-bottom text-2xl"><IoBriefcaseOutline /></div>
                             <select
                                 value={status}
                                 required={true}
@@ -205,14 +204,19 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                         </div>
 
                     </div>
+
                     <div className="mb-4">
-                        <label className="block text-gray-700">Webpage</label>
-                        <input
-                            type="text"
-                            value={webpage}
-                            onChange={(e) => setWebpage(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                        />
+                        <div className="flex justify-start items-center">
+                            <div className="max-w-10 w-full align-text-bottom text-2xl"><IoEarthOutline/></div>
+                            <input
+                                type="text"
+                                value={webpage}
+                                maxLength={100}
+                                placeholder='Enter URL'
+                                onChange={(e) => setWebpage(e.target.value)}
+                                className={`w-full px-3 focus:py-2 ${location ? 'py-2 border-gray-300 border-b-2' : ''} focus:border-b-2 focus:outline-none focus:border-b-blue-500 transition duration-200`}
+                            />
+                        </div>
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700">Image</label>
