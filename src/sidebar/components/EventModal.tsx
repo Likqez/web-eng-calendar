@@ -71,8 +71,8 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-3 rounded-lg shadow-lg w-2/5 relative" // set modal size here
-                 style={{maxHeight: 'calc(100vh - 50px)', overflowY: 'auto'}}>
+            <div className="bg-white p-3 rounded shadow-lg relative" // set modal size here
+                 style={{maxHeight: 'calc(100vh - 50px)', overflowY: 'auto', width: '36%'}}>
                 <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl">
                     <IoCloseSharp/>
                 </button>
