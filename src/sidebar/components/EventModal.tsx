@@ -131,7 +131,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                                         required={true}
                                         value={start}
                                         onChange={(e) => setStart(e.target.value)}
-                                        className="max-w-full px-1 mr-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
+                                        className="max-w-full px-1 mr-1 py-2 border-b-2 hover:bg-gray-100 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
                                     />
 
                                     <input
@@ -140,7 +140,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                                         hidden={allday}
                                         value={startTime}
                                         onChange={(e) => setStartTime(e.target.value)}
-                                        className="px-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
+                                        className="px-1 py-2 border-b-2 border-b-gray-300 hover:bg-gray-100 focus:outline-none focus:border-b-blue-500 transition duration-200"
                                     />
                                 </div>
                                 <span className="px-1">-</span>
@@ -152,14 +152,14 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                                         required={true}
                                         value={endTime}
                                         onChange={(e) => setEndTime(e.target.value)}
-                                        className="px-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
+                                        className="px-1 py-2 border-b-2 border-b-gray-300 hover:bg-gray-100 focus:outline-none focus:border-b-blue-500 transition duration-200"
                                     />
                                     <input
                                         type="date"
                                         required={true}
                                         value={end}
                                         onChange={(e) => setEnd(e.target.value)}
-                                        className="max-w-full px-1 ml-1 py-2 border-b-2 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
+                                        className="max-w-full px-1 ml-1 py-2 border-b-2 hover:bg-gray-100 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
                                     />
                                 </div>
 
