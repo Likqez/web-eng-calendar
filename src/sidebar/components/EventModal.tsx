@@ -72,7 +72,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-1/3 relative" // set modal size here
+            <div className="bg-white p-6 rounded-lg shadow-lg w-full mx-60 relative" // set modal size here
                  style={{maxHeight: 'calc(100vh - 50px)', overflowY: 'auto'}}>
                 <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl">
                     <IoCloseSharp/>
@@ -141,7 +141,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                             <div className="pr-10 max-w-10"></div>
                             <input
                                 type="checkbox"
-                                checked={allday}
+                                value={allday}
                                 defaultChecked={false}
                                 className="text-3xl"
                                 onChange={(e) => {
@@ -157,7 +157,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
 
                     {/*Organizer*/}
                     <div className="mb-4">
-                        <div className="flex justify-start">
+                        <div className="flex justify-start items-center">
                             <div className="max-w-10 w-full align-text-bottom text-3xl"><IoAtOutline /></div>
                             <input
                                 type="text"
