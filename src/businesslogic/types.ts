@@ -34,19 +34,7 @@ export type CreateEventRequest = {
 };
 
 // Create Event Response
-export type CreateEventResponse = {
-    title: string;
-    location: string | null;
-    organizer: string;
-    start: string;
-    end: string;
-    status: "Free" | "Busy" | "Tentative";
-    allday: boolean;
-    webpage: string | null;
-    imageurl: string | null;
-    categories: Category[];
-    extra: object;
-};
+export type CreateEventResponse = RetrieveEventResponse;
 
 // Retrieve Event by ID Response
 export type RetrieveEventResponse = {

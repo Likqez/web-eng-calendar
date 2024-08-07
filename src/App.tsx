@@ -1,11 +1,12 @@
 import './App.css'
 import Header from "./header/components/Header.tsx";
 import {FormEvent, useEffect, useState} from "react";
-import {retrieveAllEvents} from "./businesslogic/CalendarAPI.ts";
+import {createEvent, retrieveAllEvents, updateEvent} from "./businesslogic/CalendarAPI.ts";
 import {CalendarEvent, mapToEvent} from "./businesslogic/types.ts";
 import Sidebar from "./sidebar/components/Sidebar.tsx";
 import Calendar from "./calendar/components/Calendar.tsx";
 import Modal from "./sidebar/components/EventModal.tsx";
+import EventRequestBuilder from "./businesslogic/EventRequestBuilder.ts";
 
 function App() {
     const [calendarDate, setCalendarDate] = useState(new Date()) // State for the main calendar showing the weekly view
@@ -42,7 +43,23 @@ function App() {
     // Modal Form submit
     const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        // Handle form submission logic here
+        const data = new FormData(event.currentTarget)
+
+        const builder = new EventRequestBuilder()
+            .setTitle(data.get('title') as string)
+            .setStart(new Date((data.get('start') as string + 'T' + (data.get('startTime') ? data.get('startTime').toString() : '00:00'))))
+            .setEnd(new Date((data.get('end') as string + 'T' + (data.get('endTime') ? data.get('endTime').toString() : '23:59'))))
+            .setAllday(data.get('allday') === 'true')
+            .setOrganizer(data.get('organizer') as string)
+            .setStatus(data.get('status') as "Free" | "Busy" | "Tentative")
+            .setWebpage(data.get('webpage') as string)
+            .setLocation(data.get('location') as string)
+            .setImagedata(data.get('imageData') as string)
+        //TODO extra handling and saving of color
+        //TODO Category missing
+
+        // if (data.get('id')) updateEvent(parseInt(data.get('id') as string), builder.build());
+        createEvent(builder.build()).then((res) => {setEvents([...events, mapToEvent(res)])});
         closeModal();
     };
 

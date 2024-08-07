@@ -97,6 +97,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                             <div className="pr-10 max-w-10"></div>
                             <input
                                 type="text"
+                                name="title"
                                 value={title}
                                 placeholder={'Enter Title'}
                                 required={true}
@@ -117,6 +118,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                                         type="date"
                                         required={true}
                                         value={start}
+                                        name="start"
                                         onChange={(e) => setStart(e.target.value)}
                                         className="max-w-full px-1 mr-1 py-2 border-b-2 hover:bg-gray-100 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
                                     />
@@ -126,6 +128,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                                         required={true}
                                         hidden={allday}
                                         value={startTime}
+                                        name="startTime"
                                         onChange={(e) => setStartTime(e.target.value)}
                                         className="px-1 py-2 border-b-2 border-b-gray-300 hover:bg-gray-100 focus:outline-none focus:border-b-blue-500 transition duration-200"
                                     />
@@ -138,6 +141,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                                         hidden={allday}
                                         required={true}
                                         value={endTime}
+                                        name="endTime"
                                         onChange={(e) => setEndTime(e.target.value)}
                                         className="px-1 py-2 border-b-2 border-b-gray-300 hover:bg-gray-100 focus:outline-none focus:border-b-blue-500 transition duration-200"
                                     />
@@ -145,6 +149,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                                         type="date"
                                         required={true}
                                         value={end}
+                                        name="end"
                                         onChange={(e) => setEnd(e.target.value)}
                                         className="max-w-full px-1 ml-1 py-2 border-b-2 hover:bg-gray-100 border-b-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
                                     />
@@ -156,13 +161,14 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                     </div>
 
                     <div className="mb-3">
-                        <div className="flex justify-center">
+                        <div className="flex justify-start">
                             <div className="pr-10 max-w-10"></div>
                             <input
                                 type="checkbox"
                                 value={allday}
                                 defaultChecked={false}
                                 className="text-3xl"
+                                name="allday"
                                 onChange={(e) => {
                                     setAllday(e.target.checked);
                                     setStartTime(e.target.checked ? '00:00' : startTime);
@@ -184,6 +190,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                                 value={organizer}
                                 placeholder={'Organizer Email'}
                                 maxLength={50}
+                                name="organizer"
                                 onChange={(e) => setOrganizer(e.target.value)}
                                 className={`text-sm px-3 w-full py-2 border-b-2 border-gray-300 hover:bg-gray-100 focus:outline-none focus:border-b-blue-500 transition duration-200`}
                             />
@@ -192,6 +199,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                             <select
                                 value={status}
                                 required={true}
+                                name="status"
                                 onChange={(e) => setStatus(e.target.value)}
                                 className="text-sm w-2/3 px-3 py-2 border-b-2 border-gray-300 focus:outline-none focus:border-b-blue-500 transition duration-200"
                             >
@@ -211,6 +219,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                             <input
                                 type="text"
                                 value={location}
+                                name="location"
                                 placeholder={'Location'}
                                 maxLength={50}
                                 onChange={(e) => setLocation(e.target.value)}
@@ -225,6 +234,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                             <input
                                 type="text"
                                 value={webpage}
+                                name="webpage"
                                 maxLength={100}
                                 placeholder='Website'
                                 onChange={(e) => setWebpage(e.target.value)}
@@ -240,6 +250,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                         <input
                             ref={imageInputRef}
                             type="file"
+                            accept="image/png, image/jpeg"
                             onChange={handleImageChange}
                             className="w-2/3 px-3 py-2 focus:outline-none transition duration-200"
                         />
@@ -254,6 +265,10 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                             <IoTrashOutline/>
                         </button>
                     </div>
+
+                    {/* Hidden input fields to pass the values of the state using the Form*/}
+                    <input type="number" hidden value={event ? event.id : ''}/>
+                    <input type="text" name="imageData" hidden value={imageurl}/>
                     {/*<div className="mb-2">*/}
                     {/*    <label className="block text-gray-700">Categories</label>*/}
                     {/*    <input*/}
