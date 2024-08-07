@@ -5,7 +5,7 @@ import {createEvent, retrieveAllEvents, updateEvent} from "./businesslogic/Calen
 import {CalendarEvent, mapToEvent} from "./businesslogic/types.ts";
 import Sidebar from "./sidebar/components/Sidebar.tsx";
 import Calendar from "./calendar/components/Calendar.tsx";
-import Modal from "./sidebar/components/EventModal.tsx";
+import EventModal from "./sidebar/components/EventModal.tsx";
 import EventRequestBuilder from "./businesslogic/EventRequestBuilder.ts";
 
 function App() {
@@ -36,6 +36,13 @@ function App() {
         fetchEvents();
     }, []);
 
+    //TODO: remoe. this is simulating a click on an edit button of an event
+    // maybe needs to be changed from selectedEvent state to something else idk yet
+    useEffect(() => {
+        if(loading) return;
+        setSelectedEvent(events[12]);
+        console.log(events[12])
+    }, [events]);
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -55,11 +62,17 @@ function App() {
             .setWebpage(data.get('webpage') as string)
             .setLocation(data.get('location') as string)
             .setImagedata(data.get('imageData') as string)
-        //TODO extra handling and saving of color
         //TODO Category missing
 
-        // if (data.get('id')) updateEvent(parseInt(data.get('id') as string), builder.build());
-        createEvent(builder.build()).then((res) => {setEvents([...events, mapToEvent(res)])});
+        // Send create or update request (POST / PUT)
+        if (data.get('id')){
+            updateEvent(parseInt(data.get('id') as string), builder.build()).then((res) => {
+                setEvents(events.map((e) => e.id === res.id ? mapToEvent(res) : e));
+                console.log("Updated event", res);
+            });
+        } else {
+            createEvent(builder.build()).then((res) => {setEvents([...events, mapToEvent(res)])});
+        }
         closeModal();
     };
 
@@ -83,7 +96,7 @@ function App() {
                     <Calendar selectedDate={calendarDate} events={events}/>
                 </div>
             </div>
-            {isModalOpen && <Modal event={selectedEvent} onClose={closeModal} onSubmit={handleFormSubmit}/>}
+            {isModalOpen && <EventModal event={selectedEvent} onClose={closeModal} onSubmit={handleFormSubmit}/>}
         </>
     )
 }

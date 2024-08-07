@@ -13,33 +13,34 @@ interface ModalProps {
     event?: CalendarEvent | null;
 }
 
-const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
-    const [title, setTitle] = useState(event?.title || '');
-    const [location, setLocation] = useState(event?.location || '');
-    const [organizer, setOrganizer] = useState(event?.organizer || '');
-    const [start, setStart] = useState(event ? event.start.toISOString().substring(0, 16) : '');
-    const [startTime, setStartTime] = useState(event ? event.start.toISOString().substring(11, 16) : '');
-    const [end, setEnd] = useState(event ? event.end.toISOString().substring(0, 16) : '');
-    const [endTime, setEndTime] = useState(event ? event.end.toISOString().substring(11, 16) : '');
-    const [status, setStatus] = useState(event?.status || 'Free');
-    const [allday, setAllday] = useState(event?.allday || false);
-    const [webpage, setWebpage] = useState(event?.webpage || '');
-    const [imageurl, setImageurl] = useState(event?.imageurl || '');
-    const [categories, setCategories] = useState(event?.categories || []);
+const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
+    const [title, setTitle] = useState('');
+    const [location, setLocation] = useState('');
+    const [organizer, setOrganizer] = useState('');
+    const [start, setStart] = useState('');
+    const [startTime, setStartTime] = useState('');
+    const [end, setEnd] = useState('');
+    const [endTime, setEndTime] = useState('');
+    const [status, setStatus] = useState('Free');
+    const [allday, setAllday] = useState(false);
+    const [webpage, setWebpage] = useState('');
+    const [imageurl, setImageurl] = useState('');
+    const [categories, setCategories] = useState([]);
 
     const imageInputRef = React.createRef<HTMLInputElement>();
 
     // Memoize the header color
     const headerColor = useMemo(() => generateUniqueHexColor(event ? event.id : Math.random()*100), [event]);
-    console.log(headerColor);
 
     useEffect(() => {
         if (event) {
             setTitle(event.title);
             setLocation(event.location || '');
             setOrganizer(event.organizer);
-            setStart(event.start.toISOString().substring(0, 16));
-            setEnd(event.end.toISOString().substring(0, 16));
+            setStart(event.start.toISOString().substring(0, 10));
+            setStartTime(event.start.toISOString().substring(11, 16));
+            setEnd(event.end.toISOString().substring(0, 10));
+            setEndTime(event.end.toISOString().substring(11, 16));
             setStatus(event.status);
             setAllday(event.allday || false);
             setWebpage(event.webpage || '');
@@ -254,11 +255,10 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                             onChange={handleImageChange}
                             className="w-2/3 px-3 py-2 focus:outline-none transition duration-200"
                         />
-                        <button onClick={() => {
-                            setImageurl('');
+                        <button type="button" onClick={() => {
+                            setImageurl('REMOVE')
                             if (imageInputRef.current)
                                 imageInputRef.current.value = '';
-                            else (setImageurl('REMOVE'))
 
                         }} className="p-2 text-red-500 hover:text-red-300 transition duration-200 text-2xl"
                         >
@@ -267,7 +267,7 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                     </div>
 
                     {/* Hidden input fields to pass the values of the state using the Form*/}
-                    <input type="number" hidden value={event ? event.id : ''}/>
+                    <input type="number" name="id" hidden value={event ? event.id : ''}/>
                     <input type="text" name="imageData" hidden value={imageurl}/>
                     {/*<div className="mb-2">*/}
                     {/*    <label className="block text-gray-700">Categories</label>*/}
@@ -301,4 +301,4 @@ const Modal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
     );
 };
 
-export default Modal;
+export default EventModal;

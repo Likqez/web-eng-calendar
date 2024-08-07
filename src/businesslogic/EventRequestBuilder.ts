@@ -62,8 +62,7 @@ class EventRequestBuilder {
     }
 
     setImagedata(image: string | "REMOVE"): EventRequestBuilder {
-        if (image === "REMOVE") this.imagedata = null;
-        else this.imagedata = image;
+        this.imagedata = image;
         return this;
     }
 
