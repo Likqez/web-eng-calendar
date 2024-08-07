@@ -3,11 +3,10 @@
 import SidebarCalendar, {SidebarCalendarProps} from "./SidebarCalendar.tsx";
 import {IoAddSharp} from "react-icons/io5";
 import {FC} from "react";
-import {CalendarEvent} from "../../businesslogic/types.ts";
 
 interface SidebarProps {
     sidebar: SidebarCalendarProps;
-    onClickCreateEntry: (event: CalendarEvent) => void
+    onClickCreateEntry: () => void
 }
 
 const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
@@ -29,7 +28,7 @@ const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
 }
 
 interface CreateButtonProps {
-    onClickCreateEntry: (event: CalendarEvent) => void
+    onClickCreateEntry: () => void
 }
 
 const CreateButton: FC<CreateButtonProps> = (props: CreateButtonProps) => {

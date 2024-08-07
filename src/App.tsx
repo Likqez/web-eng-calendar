@@ -1,6 +1,6 @@
 import './App.css'
 import Header from "./header/components/Header.tsx";
-import React, {useEffect, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 import {retrieveAllEvents} from "./businesslogic/CalendarAPI.ts";
 import {CalendarEvent, mapToEvent} from "./businesslogic/types.ts";
 import Sidebar from "./sidebar/components/Sidebar.tsx";
@@ -36,18 +36,11 @@ function App() {
     }, []);
 
 
-    const openModal = (event: CalendarEvent) => {
-        if (event) {
-            setSelectedEvent(event);
-        } else {
-            setSelectedEvent(null);
-        }
-        setIsModalOpen(true);
-    }
+    const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
     // Modal Form submit
-    const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         // Handle form submission logic here
         closeModal();
@@ -73,7 +66,7 @@ function App() {
                     <Calendar selectedDate={calendarDate} events={events}/>
                 </div>
             </div>
-            {isModalOpen && <Modal onClose={closeModal} onSubmit={handleFormSubmit}/>}
+            {isModalOpen && <Modal event={selectedEvent} onClose={closeModal} onSubmit={handleFormSubmit}/>}
         </>
     )
 }
