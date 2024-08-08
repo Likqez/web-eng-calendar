@@ -7,7 +7,7 @@ import Sidebar from "./sidebar/components/Sidebar.tsx";
 import Calendar from "./calendar/components/Calendar.tsx";
 import EventModal from "./sidebar/components/EventModal.tsx";
 import EventRequestBuilder from "./businesslogic/EventRequestBuilder.ts";
-import Funny, { initAnimation } from './funnies/component/Funnies.tsx';
+import Funny, {initAnimation} from './funnies/component/Funnies.tsx';
 
 function App() {
     const [calendarDate, setCalendarDate] = useState(new Date()) // State for the main calendar showing the weekly view
@@ -62,16 +62,21 @@ function App() {
             .setWebpage(data.get('webpage') as string)
             .setLocation(data.get('location') as string)
             .setImagedata(data.get('imageData') as string)
+
         //TODO Category missing
 
+        if (data.get('imageData') === '') builder.setImagedata(null);
+
         // Send create or update request (POST / PUT)
-        if (data.get('id')){
+        if (data.get('id')) {
             updateEvent(parseInt(data.get('id') as string), builder.build()).then((res) => {
                 setEvents(events.map((e) => e.id === res.id ? mapToEvent(res) : e));
                 console.log("Updated event", res);
             });
         } else {
-            createEvent(builder.build()).then((res) => {setEvents([...events, mapToEvent(res)])});
+            createEvent(builder.build()).then((res) => {
+                setEvents([...events, mapToEvent(res)])
+            });
         }
         closeModal();
     };
@@ -79,8 +84,7 @@ function App() {
     const handleTogglingFunny = () => {
         if (funnyVisible) {
             setMoreFunnies([]); // https://imgflip.com/i/8zmky9
-        }
-        else {
+        } else {
             const amount_of_funnies = 5;
             const minX = 50, maxX = window.innerWidth - 50;
             const minY = 50, maxY = window.innerHeight - 50;
@@ -124,8 +128,8 @@ function App() {
 
     return (
         <>
-            { (funnyVisible) ?
-                funny.map((d) => <Funny x={d.x} y={d.y} />) :
+            {(funnyVisible) ?
+                funny.map((d) => <Funny x={d.x} y={d.y}/>) :
                 <></>
             }
             <div className="flex flex-col h-svh">
@@ -148,10 +152,10 @@ function App() {
                         />
                     </div>
                     <Calendar
-                            selectedDate={calendarDate}
-                            events={events}
-                            onEntryClickEvent={handleEntryClick}
-                            onOverlayDoubleClick={(d) => handleCreateViaOverlay(d)} />
+                        selectedDate={calendarDate}
+                        events={events}
+                        onEntryClickEvent={handleEntryClick}
+                        onOverlayDoubleClick={(d) => handleCreateViaOverlay(d)}/>
                 </div>
             </div>
             {isModalOpen && <EventModal event={selectedEvent} onClose={closeModal} onSubmit={handleFormSubmit}/>}

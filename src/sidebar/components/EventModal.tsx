@@ -1,11 +1,12 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import {
     IoAtOutline, IoBriefcaseOutline,
-    IoCloseSharp, IoEarthOutline,
+    IoCloseSharp,
     IoLocationOutline, IoTimeOutline, IoTrashOutline
 } from "react-icons/io5";
 import {CalendarEvent} from "../../businesslogic/types.ts";
 import {generateUniqueHexColor} from "../../businesslogic/util/ColorGenerationUtil.ts";
+import {IoIosGlobe} from "react-icons/io";
 
 interface ModalProps {
     onClose: () => void;
@@ -231,7 +232,7 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
 
                     <div className="mb-1">
                         <div className="flex justify-start items-center">
-                            <div className="max-w-10 w-full align-text-bottom text-2xl"><IoEarthOutline/></div>
+                            <div className="max-w-10 w-full align-text-bottom text-2xl"><IoIosGlobe/></div>
                             <input
                                 type="text"
                                 value={webpage}
