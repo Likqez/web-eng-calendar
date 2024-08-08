@@ -25,7 +25,7 @@ const CalendarEntry = (props: CalendarEntryProp) => {
                 style={{
                      height: `${pxHeight}px`,
                      marginTop: `${startHeight}px`,
-                     backgroundColor: `${generateUniqueHexColor(props.event.id)}` // oshea-02.08.2024: For that spicy random stuff
+                     backgroundColor: generateUniqueHexColor(props.event.id)
                  }}>
                     <span className="line-clamp-1 text-xl">
                         {props.event.title}
