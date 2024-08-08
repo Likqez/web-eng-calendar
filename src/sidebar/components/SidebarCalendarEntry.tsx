@@ -43,8 +43,7 @@ const SidebarCalendarEntry: FC<SidebarCalendarEntryProps> = (props) => {
                     (!hasEvent) ?
                         <></> :
                         <div className="flex w-full justify-center">
-                            <div className="rounded-full h-1 w-1"
-                                style={{backgroundColor: generateCalendarEventColor(props.eventMap[calcDateIndex(date)])}}>
+                            <div className="rounded-full h-1 w-1 bg-orange-500">
                             </div>
                         </div>
                 }
