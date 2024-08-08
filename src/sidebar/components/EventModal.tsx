@@ -34,7 +34,7 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
 
     useEffect(() => {
         if (event) {
-            setTitle(event.title);
+            setTitle(event.title || '');
             setLocation(event.location || '');
             setOrganizer(event.organizer);
             setStart(event.start.toISOString().substring(0, 10));
