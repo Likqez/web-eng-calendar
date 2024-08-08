@@ -89,6 +89,7 @@ function App() {
                                 selectedDate: calendarDate,
                                 onDisplayDateChange: setSideBarCalendarDate,
                                 onDateSelected: setCalendarDate,
+                                events: events,
                             }}
                             onClickCreateEntry={openModal}
                         />

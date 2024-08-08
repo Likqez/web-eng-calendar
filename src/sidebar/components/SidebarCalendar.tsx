@@ -1,6 +1,8 @@
 import {IoChevronBackSharp, IoChevronForwardSharp} from "react-icons/io5";
 import {FC} from "react";
 import SidebarCalendarEntry from "./SidebarCalendarEntry.tsx";
+import { CalendarEvent } from "../../businesslogic/types.ts";
+import { calcDateIndex, calcDaysFromTo, compareDates } from "../../businesslogic/util/DateUtil.ts";
 
 const DAYS_OF_WEEK: DayEntry[] = [
     { short: 'M', long: "Monday" },
@@ -14,12 +16,13 @@ const DAYS_OF_WEEK: DayEntry[] = [
 const MONTH_OF_YEAR = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 interface DayEntry {
-    short: string,
-    long: string
+    short: string;
+    long: string;
 }
 
 export interface SidebarCalendarProps {
-    displayDate: Date,
+    events: CalendarEvent[];
+    displayDate: Date;
     onDisplayDateChange: (date: Date) => void;
     selectedDate: Date;
     onDateSelected: (date: Date) => void;
@@ -48,6 +51,13 @@ const SidebarCalendar: FC<SidebarCalendarProps> = (props) => {
         props.onDisplayDateChange(displayDate);
         props.onDateSelected(date);
     };
+
+    const eventMap: { [id: number] : CalendarEvent; } = {};
+    for (let event of props.events) {
+        const dates = calcDaysFromTo(event.start, event.end);
+        dates.forEach(d => eventMap[calcDateIndex(d)] = event)
+    }
+    props.events
 
     // Component
     return (
@@ -89,7 +99,8 @@ const SidebarCalendar: FC<SidebarCalendarProps> = (props) => {
                                 displayDate: displayDate,
                                 date: d,
                                 selectedDate: props.selectedDate,
-                                onClick: () => {setNewSelectedDate(d)}
+                                onClick: () => {setNewSelectedDate(d)},
+                                eventMap: eventMap
                             }))
                     }
                 </div>

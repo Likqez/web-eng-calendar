@@ -6,7 +6,7 @@ import {FC} from "react";
 
 interface SidebarProps {
     sidebar: SidebarCalendarProps;
-    onClickCreateEntry: () => void
+    onClickCreateEntry: () => void;
 }
 
 const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
@@ -17,7 +17,8 @@ const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
                     <CreateButton onClickCreateEntry={props.onClickCreateEntry}/>
                 </div>
                 <div className="pt-8 flex justify-center">
-                    <SidebarCalendar displayDate={props.sidebar.displayDate}
+                    <SidebarCalendar events={props.sidebar.events}
+                                     displayDate={props.sidebar.displayDate}
                                      selectedDate={props.sidebar.selectedDate}
                                      onDateSelected={props.sidebar.onDateSelected}
                                      onDisplayDateChange={props.sidebar.onDisplayDateChange}/>
