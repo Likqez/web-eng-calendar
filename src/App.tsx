@@ -43,13 +43,6 @@ function App() {
         fetchEvents();
     }, []);
 
-    //TODO: remoe. this is simulating a click on an edit button of an event
-    // maybe needs to be changed from selectedEvent state to something else idk yet
-    useEffect(() => {
-        if(loading) return;
-        setSelectedEvent(events[12]);
-        console.log(events[12])
-    }, [events]);
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -148,7 +141,10 @@ function App() {
                                 onDateSelected: setCalendarDate,
                                 events: events,
                             }}
-                            onClickCreateEntry={openModal}
+                            onClickCreateEntry={() => {
+                                setSelectedEvent(null);
+                                openModal();
+                            }}
                         />
                     </div>
                     <Calendar
