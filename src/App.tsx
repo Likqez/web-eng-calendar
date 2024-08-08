@@ -81,6 +81,13 @@ function App() {
         setIsModalOpen(true);
     };
 
+    const handleCreateViaOverlay = (date: Date) => {
+        // Todo:
+        //  Allow adding data
+        setSelectedEvent(null);
+        setIsModalOpen(true);
+    }
+
     return (
         <>
             <div className="flex flex-col h-svh">
@@ -99,7 +106,11 @@ function App() {
                             onClickCreateEntry={openModal}
                         />
                     </div>
-                    <Calendar selectedDate={calendarDate} events={events} onEntryClickEvent={handleEntryClick} />
+                    <Calendar
+                            selectedDate={calendarDate}
+                            events={events}
+                            onEntryClickEvent={handleEntryClick}
+                            onOverlayDoubleClick={(d) => {handleCreateViaOverlay(d)}} />
                 </div>
             </div>
             {isModalOpen && <EventModal event={selectedEvent} onClose={closeModal} onSubmit={handleFormSubmit}/>}

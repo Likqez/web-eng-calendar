@@ -2,7 +2,13 @@ import { CalendarEvent } from "../../businesslogic/types";
 import { BodyProp } from "./CalendarBody";
 import CalendarEntry from "./CalendarEntry";
 
-const CalendarEventOverlay = (props: BodyProp) => {
+interface OverlayProps {
+    weekDates: Date[];
+    events: CalendarEvent[];
+    onEntryClick: (event: CalendarEvent) => void;
+}
+
+const CalendarEventOverlay = (props: OverlayProps) => {
     return (
         <>
             <div id="event_overlay" className="w-full h-full grid grid-cols-7 px-2">

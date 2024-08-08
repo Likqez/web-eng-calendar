@@ -7,6 +7,7 @@ interface CalendarProps {
     events: CalendarEvent[];
     selectedDate: Date;
     onEntryClickEvent: (event: CalendarEvent) => void;
+    onOverlayDoubleClick: (date: Date) => void;
     // onClickCreateEntry: () => void // Was also for additional create button
 }
 
@@ -18,7 +19,11 @@ const Calendar = (props: CalendarProps) => {
             <div id="calendar" className="flex flex-col w-full pt-2 overflow-hidden">
                 <CalendarHeader weekDates={weekDates} selectedDate={props.selectedDate} />
                 <div className="overflow-y-scroll scrollbar-hide pb-6">
-                    <CalendarBody weekDates={weekDates} events={props.events} onEntryClick={props.onEntryClickEvent} />
+                    <CalendarBody
+                            weekDates={weekDates} 
+                            events={props.events}
+                            onEntryClick={props.onEntryClickEvent}
+                            onOverlayDoubleClick={props.onOverlayDoubleClick} />
                 </div>
             </div>
         </>
