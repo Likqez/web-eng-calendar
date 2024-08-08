@@ -75,3 +75,14 @@ export const getTimeFormatted = (date: Date): string => {
     const m: string = date.getMinutes().toString();
     return ("00".substring(0, 2 - h.length) + h) + ":" + ("00".substring(0, 2 - m.length) + m);
 }
+
+/**
+ * @param date Date to format
+ * @returns A formatted string of the date: "yyyy-MM-dd" 
+ */
+export const getDateFormatted = (date: Date): string => {
+    const y: string = date.getFullYear().toString();
+    const m: string = date.getMonth().toString();
+    const d: string = date.getDate().toString();
+    return ("0000".substring(0, 4 - y.length) + y) + "-" + ("00".substring(0, 2 - m.length) + m) + "-" + ("00".substring(0, 2 - d.length) + d);
+}
