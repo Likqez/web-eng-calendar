@@ -24,7 +24,7 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
     const [status, setStatus] = useState('Free');
     const [allday, setAllday] = useState(false);
     const [webpage, setWebpage] = useState('');
-    const [imageurl, setImageurl] = useState('');
+    const [imageurl, setImageurl] = useState(null);
     const [categories, setCategories] = useState([]);
 
     const imageInputRef = React.createRef<HTMLInputElement>();
@@ -44,7 +44,7 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
             setStatus(event.status);
             setAllday(event.allday || false);
             setWebpage(event.webpage || '');
-            setImageurl(event.imageurl || '');
+            setImageurl(event.imageurl || null);
             setCategories(event.categories || []);
         }
     }, [event]);
