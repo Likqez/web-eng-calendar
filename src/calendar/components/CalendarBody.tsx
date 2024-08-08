@@ -6,6 +6,7 @@ import CalendarVisualGrid from "./CalendarVisualGrid"
 export interface BodyProp {
     weekDates: Date[];
     events: CalendarEvent[];
+    onEntryClick: (event: CalendarEvent) => void;
 }
 
 const CalendarBody = (props: BodyProp) => {
@@ -15,7 +16,7 @@ const CalendarBody = (props: BodyProp) => {
                 <CalendarSidebar />
                 <div className="relative mx-2 pt-2 w-full">
                     <CalendarVisualGrid />
-                    <CalendarEventOverlay events={props.events} weekDates={props.weekDates} />
+                    <CalendarEventOverlay events={props.events} weekDates={props.weekDates} onEntryClick={props.onEntryClick} />
                 </div>
             </div>
         </>

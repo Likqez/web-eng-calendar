@@ -34,7 +34,3 @@ function xorshift32amx(a: number): number {
 export const generateUniqueHexColor = (num: number): string => {
     return '#' + intToRGB(hashStr(xorshift32amx(num).toString()));
 }
-
-export const generateCalendarEventColor = (event: CalendarEvent): string => {
-    return generateUniqueHexColor(event.id);
-}

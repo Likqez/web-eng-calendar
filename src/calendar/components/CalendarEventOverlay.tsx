@@ -9,7 +9,7 @@ const CalendarEventOverlay = (props: BodyProp) => {
                 {
                     filterEventsOfWeek(props.weekDates[3], props.events)
                         .map(dayEvents =>
-                            <SingleEvent dayEvents={dayEvents}  />
+                            <SingleEvent dayEvents={dayEvents} onClick={props.onEntryClick} />
                         )
                 }
             </div>
@@ -21,6 +21,7 @@ export default CalendarEventOverlay;
 
 interface SingleEventProp {
     dayEvents: CalendarEvent[];
+    onClick: (event: CalendarEvent) => void;
 }
 
 const SingleEvent = (props: SingleEventProp) => {
@@ -29,7 +30,7 @@ const SingleEvent = (props: SingleEventProp) => {
             <div className="flex flex-col w-full h-full relative">
                 {
                     props.dayEvents.map((event) =>
-                        <CalendarEntry event={event} />
+                        <CalendarEntry event={event} onClick={props.onClick} />
                     )
                 }
             </div>
@@ -55,7 +56,6 @@ function filterEventsOfWeek(middleOfWeek: Date, events: CalendarEvent[]): Calend
         const deltaDate = new Date(time).getDate();
         return (deltaDate <= 3);
     }).forEach((event) => {
-        console.log(event);
         const day = event.start.getDay();
         const index = (day === 0) ? 6 : day - 1;
         filtered[index].push(event);
@@ -72,6 +72,5 @@ function filterEventsOfWeek(middleOfWeek: Date, events: CalendarEvent[]): Calend
         });
     }
 
-    console.log(filtered);
     return filtered;
 }

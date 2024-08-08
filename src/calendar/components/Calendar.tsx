@@ -5,7 +5,8 @@ import CalendarBody from './CalendarBody.tsx';
 
 interface CalendarProps {
     events: CalendarEvent[];
-    selectedDate: Date,
+    selectedDate: Date;
+    onEntryClickEvent: (event: CalendarEvent) => void;
     // onClickCreateEntry: () => void // Was also for additional create button
 }
 
@@ -17,7 +18,7 @@ const Calendar = (props: CalendarProps) => {
             <div id="calendar" className="flex flex-col w-full pt-2 overflow-hidden">
                 <CalendarHeader weekDates={weekDates} selectedDate={props.selectedDate} />
                 <div className="overflow-y-scroll scrollbar-hide pb-6">
-                    <CalendarBody weekDates={weekDates} events={props.events} />
+                    <CalendarBody weekDates={weekDates} events={props.events} onEntryClick={props.onEntryClickEvent} />
                 </div>
             </div>
         </>

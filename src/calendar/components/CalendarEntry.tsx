@@ -6,6 +6,7 @@ const PX_PER_MINUTE = (ENTRY_HEIGHT / 60);
 
 interface CalendarEntryProp {
     event: CalendarEvent;
+    onClick: (event: CalendarEvent) => void;
 }
 
 const CalendarEntry = (props: CalendarEntryProp) => {
@@ -16,14 +17,16 @@ const CalendarEntry = (props: CalendarEntryProp) => {
 
     return (
         <>
-            <div id={`event-${props.event.id}`}
-                 className="w-full flex flex-col pl-2 absolute"
-                 style={{
+            <button
+                id={`event-${props.event.id}`}
+                onClick={() => props.onClick(props.event)}
+                className="w-full flex flex-col pl-2 absolute rounded-lg"
+                style={{
                      height: `${pxHeight}px`,
                      marginTop: `${startHeight}px`,
-                     backgroundColor: `${generateUniqueHexColor}` // oshea-02.08.2024: For that spicy random stuff
+                     backgroundColor: `${generateUniqueHexColor(props.event.id)}` // oshea-02.08.2024: For that spicy random stuff
                  }}>
-                    <span className="line-clamp-1 text-xl truncate">
+                    <span className="line-clamp-1 text-xl">
                         {props.event.title}
                     </span>
                     <span className="line-clamp-1">
@@ -32,7 +35,7 @@ const CalendarEntry = (props: CalendarEntryProp) => {
                     {
                         (props.event.location) ? <span className="line-clamp-1"> {props.event.location} </span> : <> </>
                     }
-            </div>
+            </button>
         </>
     );
 }

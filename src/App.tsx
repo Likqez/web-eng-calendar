@@ -76,6 +76,11 @@ function App() {
         closeModal();
     };
 
+    const handleEntryClick = (event: CalendarEvent) => {
+        setSelectedEvent(event);
+        setIsModalOpen(true);
+    };
+
     return (
         <>
             <div className="flex flex-col h-svh">
@@ -94,7 +99,7 @@ function App() {
                             onClickCreateEntry={openModal}
                         />
                     </div>
-                    <Calendar selectedDate={calendarDate} events={events}/>
+                    <Calendar selectedDate={calendarDate} events={events} onEntryClickEvent={handleEntryClick} />
                 </div>
             </div>
             {isModalOpen && <EventModal event={selectedEvent} onClose={closeModal} onSubmit={handleFormSubmit}/>}
