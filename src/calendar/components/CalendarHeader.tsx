@@ -13,12 +13,16 @@ const CalendarHeader = (props: HeaderProp) => {
 
     return (
         <>
-            <div className="ml-12">
-                <div id="calendar_header" className="grid grid-rows-2 w-full border-b border-gray-400 pb-1 mx-2">
-                    <div className="grid grid-cols-7 px-2 pt-3 text-center min-w-72">
+            <div className="flex flex-row w-full">
+                {/* Empty contaienr for positioning */}
+                <div className="min-w-12 w-12 max-w-12"></div>
+
+                {/* Header */}
+                <div id="calendar_header" className="grid grid-rows-2 w-full pb-2 border-b-2 border-gray-400">
+                    <div className="grid grid-cols-7 px-4 pt-3 text-center min-w-72">
                         {DAYS.map((day) => <span> {day} </span>)}
                     </div>
-                    <div className="grid grid-cols-7 px-2 pt-3 text-center">
+                    <div className="grid grid-cols-7 px-4 pt-3 text-center">
                         {
                             weekDates.map((day) =>
                                 <WeekDay date={day} selectedDate={selectedDate} />
