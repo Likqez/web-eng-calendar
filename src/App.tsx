@@ -113,9 +113,19 @@ function App() {
     };
 
     const handleCreateViaOverlay = (date: Date) => {
-        // Todo:
-        //  Allow adding data
-        setSelectedEvent(null);
+        setSelectedEvent({
+            title: null,
+            location: null,
+            organizer: null,
+            start: date,
+            end: date,
+            allday: false,
+            webpage: null,
+            imageurl: null,
+            categories: null,
+            status: null,
+            id: null
+        });
         setIsModalOpen(true);
     }
 
@@ -145,7 +155,7 @@ function App() {
                             selectedDate={calendarDate}
                             events={events}
                             onEntryClickEvent={handleEntryClick}
-                            onOverlayDoubleClick={(d) => {console.log(d)}} />
+                            onOverlayDoubleClick={(d) => handleCreateViaOverlay(d)} />
                 </div>
             </div>
             {isModalOpen && <EventModal event={selectedEvent} onClose={closeModal} onSubmit={handleFormSubmit}/>}
