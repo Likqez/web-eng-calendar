@@ -15,7 +15,7 @@ const Header = () => {
                 <IoSettingsSharp className="flex-none fill-black py-2 w-fit h-full ml-auto mr-2 my-auto"/>
 
                 {/* "User icon" only really used for fun stuff :) */}
-                <img alt="user profile" title="Click for the funnies :)" src="../../../public/goose_funnies.jpeg"
+                <img alt="user profile" title="Click for the funnies :)" src="/goose_funnies.jpeg"
                      className="flex-none w-10 h-10 rounded-full mr-2 my-2"
 
                 />
