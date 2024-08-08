@@ -45,3 +45,13 @@ export async function updateEvent(eventId: number, event: UpdateEventRequest): P
     }
     return response.json();
 }
+
+export async function deleteEvent(eventId: number){
+    const response = await fetch(`${HOST}/events/${eventId}`, {
+        method: "DELETE"
+    });
+    if (!response.ok) {
+        throw new Error("Failed to update event");
+    }
+    return response.json();
+}
