@@ -7,6 +7,7 @@ import {
 import {CalendarEvent} from "../../businesslogic/types.ts";
 import {generateUniqueHexColor} from "../../businesslogic/util/ColorGenerationUtil.ts";
 import {IoIosGlobe} from "react-icons/io";
+import {getDateFormatted, getTimeFormatted} from "../../businesslogic/util/DateUtil.ts";
 
 interface ModalProps {
     onClose: () => void;
@@ -38,10 +39,10 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
             setTitle(event.title || '');
             setLocation(event.location || '');
             setOrganizer(event.organizer);
-            setStart(event.start.toISOString().substring(0, 10));
-            setStartTime(event.start.toISOString().substring(11, 16));
-            setEnd(event.end.toISOString().substring(0, 10));
-            setEndTime(event.end.toISOString().substring(11, 16));
+            setStart(getDateFormatted(event.start));
+            setStartTime(getTimeFormatted(event.start));
+            setEnd(getDateFormatted(event.end));
+            setEndTime(getTimeFormatted(event.end));
             setStatus(event.status);
             setAllday(event.allday || false);
             setWebpage(event.webpage || '');
@@ -66,6 +67,9 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            const sizeInKB = file.size / 1024;
+            if(sizeInKB > 480) throw new Error('Image size should be less than 480KB');
+
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImageurl(reader.result as string);
