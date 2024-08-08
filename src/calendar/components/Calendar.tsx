@@ -16,7 +16,7 @@ const Calendar = (props: CalendarProps) => {
         <>
             <div id="calendar" className="flex flex-col w-full pt-2 overflow-hidden">
                 <CalendarHeader weekDates={weekDates} selectedDate={props.selectedDate} />
-                <div className="overflow-y-scroll scrollbar-hide mb-6">
+                <div className="overflow-y-scroll scrollbar-hide pb-6">
                     <CalendarBody weekDates={weekDates} events={props.events} />
                 </div>
             </div>
