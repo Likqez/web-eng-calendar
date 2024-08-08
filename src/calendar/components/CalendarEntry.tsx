@@ -1,5 +1,6 @@
 import {CalendarEvent} from "../../businesslogic/types.ts";
 import {generateUniqueHexColor} from "../../businesslogic/util/ColorGenerationUtil.ts";
+import { getTimeFormatted } from "../../businesslogic/util/DateUtil.ts";
 
 const ENTRY_HEIGHT = 80.5;    // Height of a single horizontal "entry" in the calendar
 const PX_PER_MINUTE = (ENTRY_HEIGHT / 60);
@@ -30,7 +31,7 @@ const CalendarEntry = (props: CalendarEntryProp) => {
                         {props.event.title}
                     </span>
                     <span className="line-clamp-1">
-                        {calcTime(props.event.start)} - {calcTime(props.event.end)}
+                        {getTimeFormatted(props.event.start)} - {getTimeFormatted(props.event.end)}
                     </span>
                     {
                         (props.event.location) ? <span className="line-clamp-1"> {props.event.location} </span> : <> </>
@@ -38,12 +39,6 @@ const CalendarEntry = (props: CalendarEntryProp) => {
             </button>
         </>
     );
-}
-
-function calcTime(date: Date): string {
-    const h: string = date.getHours().toString();
-    const m: string = date.getMinutes().toString();
-    return ("00".substring(0, 2 - h.length) + h) + ":" + ("00".substring(0, 2 - m.length) + m);
 }
 
 export default CalendarEntry;

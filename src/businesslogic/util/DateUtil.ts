@@ -65,3 +65,13 @@ export const calcDateIndex = (date: Date): number => {
 
     return Number.parseInt(yearStr + monthStr + dateStr);
 }
+
+/**
+ * @param date Date time to format
+ * @returns A formatted string of the time: "hh:mm"
+ */
+export const getTimeFormatted = (date: Date): string => {
+    const h: string = date.getHours().toString();
+    const m: string = date.getMinutes().toString();
+    return ("00".substring(0, 2 - h.length) + h) + ":" + ("00".substring(0, 2 - m.length) + m);
+}
