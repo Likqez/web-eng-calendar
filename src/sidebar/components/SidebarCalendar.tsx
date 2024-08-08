@@ -2,7 +2,7 @@ import {IoChevronBackSharp, IoChevronForwardSharp} from "react-icons/io5";
 import {FC} from "react";
 import SidebarCalendarEntry from "./SidebarCalendarEntry.tsx";
 import { CalendarEvent } from "../../businesslogic/types.ts";
-import { calcDateIndex, calcDaysFromTo, compareDates } from "../../businesslogic/util/DateUtil.ts";
+import {calcDateIndex, calcDatesFromTo} from "../../businesslogic/util/DateUtil.ts";
 
 const DAYS_OF_WEEK: DayEntry[] = [
     { short: 'M', long: "Monday" },
@@ -53,8 +53,8 @@ const SidebarCalendar: FC<SidebarCalendarProps> = (props) => {
     };
 
     const eventMap: { [id: number] : CalendarEvent; } = {};
-    for (let event of props.events) {
-        const dates = calcDaysFromTo(event.start, event.end);
+    for (const event of props.events) {
+        const dates = calcDatesFromTo(event.start, event.end);
         dates.forEach(d => eventMap[calcDateIndex(d)] = event)
     }
     props.events
