@@ -39,7 +39,7 @@ export const isSameDate = (o1: Date, o2: Date): boolean => {
  * @param end   End date
  * @returns A list of dates between "start" and "end"
  */
-export const calcDaysFromTo = (start: Date, end: Date): [Date] => {
+export const calcDatesFromTo = (start: Date, end: Date): Date[] => {
     if (compareDates(start, end) === 1) throw new Error("The end date is eralier than the start date!");
 
     const dates: [Date] = [ start ];
