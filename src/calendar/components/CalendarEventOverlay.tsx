@@ -5,12 +5,14 @@ import CalendarEntry from "./CalendarEntry";
 const CalendarEventOverlay = (props: BodyProp) => {
     return (
         <>
-            {
-                filterEventsOfWeek(props.weekDates[3], props.events)
-                    .map(dayEvents =>
-                        <SingleEvent dayEvents={dayEvents}  />
-                    )
-            }
+            <div id="event_overlay" className="w-full h-full grid grid-cols-7 px-2">
+                {
+                    filterEventsOfWeek(props.weekDates[3], props.events)
+                        .map(dayEvents =>
+                            <SingleEvent dayEvents={dayEvents}  />
+                        )
+                }
+            </div>
         </>
     )
 }
