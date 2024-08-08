@@ -3,7 +3,7 @@
 // can contain props for the date to save it and access when clicked.
 
 import {FC} from "react";
-import { isSameDate } from "../../App";
+import {isSameDate} from "../../businesslogic/util/DateUtil.ts";
 
 interface SidebarCalendarEntryProps {
     onClick: () => void

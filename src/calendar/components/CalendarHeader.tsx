@@ -1,4 +1,5 @@
-import { isSameDate } from "../../App";
+import {isSameDate} from "../../businesslogic/util/DateUtil.ts";
+
 
 const DAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
