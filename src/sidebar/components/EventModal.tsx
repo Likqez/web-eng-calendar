@@ -16,17 +16,24 @@ interface ModalProps {
 }
 
 const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
+    const currentDate = new Date();
+
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [organizer, setOrganizer] = useState('');
-    const [start, setStart] = useState('');
-    const [startTime, setStartTime] = useState('');
-    const [end, setEnd] = useState('');
-    const [endTime, setEndTime] = useState('');
+    const [start, setStart] = useState(getDateFormatted(currentDate));
+    const [end, setEnd] = useState(getDateFormatted(currentDate));
+
+    currentDate.setMinutes(currentDate.getMinutes() - (currentDate.getMinutes() % 30));
+    const [startTime, setStartTime] = useState(getTimeFormatted(currentDate));
+    currentDate.setMinutes(currentDate.getMinutes() + 60);
+
+    const [endTime, setEndTime] = useState(getTimeFormatted(currentDate));
     const [status, setStatus] = useState('Free');
     const [allday, setAllday] = useState(false);
     const [webpage, setWebpage] = useState('');
     const [imageurl, setImageurl] = useState(null);
+    const [imageData, setImageData] = useState(null);
     const [categories, setCategories] = useState([]);
 
     const imageInputRef = React.createRef<HTMLInputElement>();
@@ -73,6 +80,7 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImageurl(reader.result as string);
+                setImageData(reader.result);
             };
             reader.readAsDataURL(file);
         }
@@ -86,8 +94,8 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                     <IoCloseSharp/>
                 </button>
 
-                <div className="w-full h-24 rounded"
-                     style={{backgroundColor: imageurl ? 'transparent' : `${headerColor}`}}>
+                <div className={`w-full h-24 rounded ${imageurl ? 'bg-transparent' : 'bg-gray-500'}`}>
+                    {!imageurl && (<div className="h-full content-center text-center text-2xl font-semibold text-white">No Image Found</div>)}
                     {imageurl && imageurl !== "REMOVE" && (
                         <img src={imageurl} alt="Image" className="h-full w-full object-cover rounded"/>
                     )}
@@ -260,9 +268,10 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                             className="w-2/3 px-3 py-2 focus:outline-none transition duration-200"
                         />
                         <button type="button" onClick={() => {
-                            setImageurl('REMOVE')
+                            setImageData('REMOVE')
+                            setImageurl(null);
                             if (imageInputRef.current)
-                                imageInputRef.current.value = '';
+                                imageInputRef.current.value = null;
 
                         }} className="p-2 text-red-500 hover:text-red-300 transition duration-200 text-2xl"
                         >
@@ -272,7 +281,7 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
 
                     {/* Hidden input fields to pass the values of the state using the Form*/}
                     <input type="number" name="id" hidden value={event ? event.id : ''} readOnly />
-                    <input type="text" name="imageData" hidden value={imageurl} readOnly />
+                    <input type="text" name="imageData" hidden value={imageData} readOnly />
                     {/*<div className="mb-2">*/}
                     {/*    <label className="block text-gray-700">Categories</label>*/}
                     {/*    <input*/}
