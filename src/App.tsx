@@ -24,6 +24,8 @@ function App() {
 
     // Funnies :)
     const [funnyCounter, setFunnyCounter] = useState<number>(0);
+    const colors = ["#ff0000", "#33FF57", "#e033ff", "#F3FF33", "#FF33F3"];
+    const [colorIndex, setColorIndex] = useState(0);
 
     // Fetch events on initial load
     useEffect(() => {
@@ -40,6 +42,15 @@ function App() {
 
         fetchEvents();
     }, []);
+
+    // Interval for funnies
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setColorIndex((prevIndex) => (prevIndex + 1) % colors.length);
+        }, 3000); // Change color every 3 seconds
+
+        return () => clearInterval(interval);
+    }, [colors.length]);
 
 
     const openModal = () => setIsModalOpen(true);
@@ -114,7 +125,7 @@ function App() {
                 <Funny /> :
                 <> {/* https://imgflip.com/i/8zmky9 */ } </>
             }
-            <div className="flex flex-col h-svh">
+            <div id="funny-bg-container" className="flex flex-col h-svh" style={{ backgroundColor: funnyCounter >= 5 ? colors[colorIndex] : '' }}>
                 <Header onProfileClick={handleTogglingFunny}/>
 
                 <div className="flex flex-row w-screen overflow-auto">
