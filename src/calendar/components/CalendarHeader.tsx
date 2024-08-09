@@ -1,4 +1,5 @@
-import {isSameDate} from "../../businesslogic/util/DateUtil.ts";
+import React from "react";
+import {calcDateIndex, isSameDate} from "../../businesslogic/util/DateUtil.ts";
 
 
 const DAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
@@ -20,12 +21,20 @@ const CalendarHeader = (props: HeaderProp) => {
                 {/* Header */}
                 <div id="calendar_header" className="grid grid-rows-2 w-full pb-2 border-b-2 border-gray-400">
                     <div className="grid grid-cols-7 px-4 pt-3 text-center min-w-72">
-                        {DAYS.map((day) => <span> {day} </span>)}
+                        {
+                            DAYS.map((day) =>
+                                <React.Fragment key={`calendar_header_${day}`}>
+                                    <span> {day} </span>
+                                </React.Fragment>
+                            )
+                        }
                     </div>
                     <div className="grid grid-cols-7 px-4 pt-3 text-center">
                         {
                             weekDates.map((day) =>
-                                <WeekDay date={day} selectedDate={selectedDate} />
+                                <React.Fragment key={`calendar_header_${calcDateIndex(day)}`}>
+                                    <WeekDay date={day} selectedDate={selectedDate} />
+                                </React.Fragment>
                             )
                         }
                     </div>

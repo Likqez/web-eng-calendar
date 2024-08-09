@@ -2,10 +2,9 @@
 // replacement to the functions NonDay/CurrDay/TodayDay
 // can contain props for the date to save it and access when clicked.
 
-import {FC} from "react";
+import React, {FC} from "react";
 import {calcDateIndex, isSameDate} from "../../businesslogic/util/DateUtil.ts";
 import { CalendarEvent } from "../../businesslogic/types.ts";
-import { generateCalendarEventColor, generateUniqueHexColor } from "../../businesslogic/util/ColorGenerationUtil.ts";
 
 interface SidebarCalendarEntryProps {
     onClick: () => void;
@@ -24,9 +23,9 @@ const SidebarCalendarEntry: FC<SidebarCalendarEntryProps> = (props) => {
     const hasEvent = (props.eventMap[calcDateIndex(date)] !== undefined);
 
     return (
-        <>
+        <React.Fragment key={`sidebar_days_${calcDateIndex(date)}`}>
             <button onClick={onClick}>
-                <div className={`rounded-full hover:bg-blue-100 
+                <div key={props.date.getTime()} className={`rounded-full hover:bg-blue-100 
                 ${isSelected ? "bg-blue-300 hover:bg-blue-400" : ""}
                 ${isToday ? "bg-blue-500 hover:bg-blue-600" : ""}
                 `}>
@@ -50,7 +49,7 @@ const SidebarCalendarEntry: FC<SidebarCalendarEntryProps> = (props) => {
                 </div>
 
             </button>
-        </>
+        </React.Fragment>
     );
 }
 

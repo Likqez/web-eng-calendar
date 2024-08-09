@@ -1,5 +1,5 @@
 import {IoChevronBackSharp, IoChevronForwardSharp} from "react-icons/io5";
-import {FC} from "react";
+import React, {FC} from "react";
 import SidebarCalendarEntry from "./SidebarCalendarEntry.tsx";
 import { CalendarEvent } from "../../businesslogic/types.ts";
 import {calcDateIndex, calcDatesFromTo} from "../../businesslogic/util/DateUtil.ts";
@@ -83,9 +83,11 @@ const SidebarCalendar: FC<SidebarCalendarProps> = (props) => {
                         {
                             DAYS_OF_WEEK
                                 .map((entry) =>
-                                    <span className="has-tooltip"> {entry.short}
-                                        <span className="tooltip"> {entry.long} </span>
-                                    </span>
+                                    <React.Fragment key={`sidebar_header_${DAYS_OF_WEEK.findIndex((e) => e.long == entry.long)}`}>
+                                        <span className="has-tooltip"> {entry.short}
+                                            <span className="tooltip"> {entry.long} </span>
+                                        </span>
+                                    </React.Fragment>
                                 )
                         }
                     </div>

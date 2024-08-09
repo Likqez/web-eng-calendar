@@ -1,3 +1,4 @@
+import React from "react";
 import { getTimeFormatted } from "../../businesslogic/util/DateUtil";
 
 const CalendarSidebar = () => {
@@ -11,11 +12,11 @@ const CalendarSidebar = () => {
                         .map((hour) => {
                                 d.setHours(hour, 0);
                                 return (
-                                    <>
+                                    <React.Fragment key={`calendar_sidebar_${hour}`}>
                                         <span className="h-20 inline-block align-text-bottom text-sm">
                                             {getTimeFormatted(d)}    
                                         </span>
-                                    </>
+                                    </React.Fragment>
                                 )
                             }
                         )

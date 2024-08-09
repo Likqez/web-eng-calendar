@@ -1,3 +1,4 @@
+import React from "react";
 import { CalendarEvent } from "../../businesslogic/types";
 import { BodyProp } from "./CalendarBody";
 import CalendarEntry from "./CalendarEntry";
@@ -13,10 +14,11 @@ const CalendarEventOverlay = (props: OverlayProps) => {
         <>
             <div id="event_overlay" className="w-full h-full grid grid-cols-7 px-2">
                 {
-                    filterEventsOfWeek(props.weekDates[3], props.events)
-                        .map(dayEvents =>
-                            <SingleEvent dayEvents={dayEvents} onClick={props.onEntryClick} />
-                        )
+                    Array.from(Array(7).keys()).map(k =>
+                        <React.Fragment key={`eventoverlay_${k}`}>
+                            <SingleEvent dayEvents={entries[k]} onClick={props.onEntryClick} />
+                        </React.Fragment>
+                    )
                 }
             </div>
         </>
