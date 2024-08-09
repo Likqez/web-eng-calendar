@@ -171,8 +171,7 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                             <div className="pr-10 max-w-10"></div>
                             <input
                                 type="checkbox"
-                                value={allday}
-                                defaultChecked={false}
+                                checked={allday}
                                 className="text-3xl"
                                 name="allday"
                                 onChange={(e) => {
@@ -272,8 +271,8 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                     </div>
 
                     {/* Hidden input fields to pass the values of the state using the Form*/}
-                    <input type="number" name="id" hidden value={event ? event.id : ''}/>
-                    <input type="text" name="imageData" hidden value={imageurl}/>
+                    <input type="number" name="id" hidden value={event ? event.id : ''} readOnly />
+                    <input type="text" name="imageData" hidden value={imageurl} readOnly />
                     {/*<div className="mb-2">*/}
                     {/*    <label className="block text-gray-700">Categories</label>*/}
                     {/*    <input*/}
