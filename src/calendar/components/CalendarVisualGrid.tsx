@@ -1,11 +1,14 @@
 import React from "react";
 
+export const HEIGHT = 1000;
+export const ENTRY_HEIGHT = (HEIGHT / 24);
+
 const CalendarVisualGrid = () => {
     return (
         <>
         <div id="calendar_visual_grid">
             {/* Horizontal lines */}
-            <div id="calendar_horizontal" className="grid grid-rows-24 absolute h-full w-full px-2 min-w-72">
+            <div id="calendar_horizontal" className="grid grid-rows-24 absolute w-full px-2 min-w-72" style={{height: `${HEIGHT}px`}}>
                 {
                     Array.from(Array(24).keys())
                         .map(k =>
@@ -17,7 +20,7 @@ const CalendarVisualGrid = () => {
             </div>
 
             {/* Vertical lines */}
-            <div id="calendar_vertical" className="grid grid-cols-7 h-full w-full absolute px-2 min-w-72">
+            <div id="calendar_vertical" className="grid grid-cols-7 w-full absolute px-2 min-w-72" style={{height: `${HEIGHT}px`}}>
                 {
                     Array.from(Array(7).keys())
                         .map(k =>

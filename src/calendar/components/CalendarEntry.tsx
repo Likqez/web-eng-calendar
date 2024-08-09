@@ -2,8 +2,8 @@ import {CalendarEvent, Category} from "../../businesslogic/types.ts";
 import {generateUniqueHexColor} from "../../businesslogic/util/ColorGenerationUtil.ts";
 import { getTimeFormatted } from "../../businesslogic/util/DateUtil.ts";
 import { EntryInfo } from "../repository/CalendarEntryOverlay.ts";
+import { ENTRY_HEIGHT } from "./CalendarVisualGrid.tsx";
 
-const ENTRY_HEIGHT = 80.5;    // Height of a single horizontal "entry" in the calendar
 const PX_PER_MINUTE = (ENTRY_HEIGHT / 60);
 
 interface CalendarEntryProp {
