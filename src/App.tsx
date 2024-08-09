@@ -105,6 +105,7 @@ function App() {
     }
 
     const handleEntryClick = (event: CalendarEvent) => {
+        console.log(events);
         setSelectedEvent(event);
         setIsModalOpen(true);
     };
@@ -115,7 +116,7 @@ function App() {
             location: null,
             organizer: null,
             start: date,
-            end: date,
+            end: new Date(date.getTime() + 30 * 60_000),    // Adding 30 mins
             allday: false,
             webpage: null,
             imageurl: null,
