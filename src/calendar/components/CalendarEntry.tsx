@@ -20,10 +20,11 @@ const CalendarEntry = (props: CalendarEntryProp) => {
             <button
                 id={`event-${props.info.event.id}`}
                 onClick={() => props.onClick(props.info.event)}
-                className="w-11/12 flex flex-col absolute rounded-lg bg-blue-500 border-white border-2"
+                className="w-11/12 flex flex-col absolute rounded-lg border-white border-2"
                 style={{
                      height: `${pxHeight}px`,
-                     marginTop: `${startHeight}px`
+                     marginTop: `${startHeight}px`,
+                    backgroundColor: `${generateUniqueHexColor(props.info.event.id)}`,
                  }}>
                     <div className="flex-col h-full absolute">
                         <CategoryIndicator cats={props.info.event.categories}/>
