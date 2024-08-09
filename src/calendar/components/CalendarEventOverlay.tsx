@@ -1,6 +1,6 @@
 import React from "react";
 import { CalendarEvent } from "../../businesslogic/types";
-import { BodyProp } from "./CalendarBody";
+import { calcEntriesForWeek, EntryInfo } from "../repository/CalendarEntryOverlay";
 import CalendarEntry from "./CalendarEntry";
 
 interface OverlayProps {
@@ -10,14 +10,21 @@ interface OverlayProps {
 }
 
 const CalendarEventOverlay = (props: OverlayProps) => {
+    const entries: EntryInfo[][] = calcEntriesForWeek(props.events, props.weekDates);
+    // console.log(entries);
+
     return (
         <>
             <div id="event_overlay" className="w-full h-full grid grid-cols-7 px-2">
                 {
-                    Array.from(Array(7).keys()).map(k =>
-                        <React.Fragment key={`eventoverlay_${k}`}>
-                            <SingleEvent dayEvents={entries[k]} onClick={props.onEntryClick} />
-                        </React.Fragment>
+                    Array.from(Array(7).keys()).map(k => {
+                        const sorted = sortEntries(entries[k]);
+                        return (
+                            <React.Fragment key={`eventoverlay_${k}`}>
+                                <SingleEvent dayEvents={sorted} onClick={props.onEntryClick} />
+                            </React.Fragment>
+                        );
+                        }
                     )
                 }
             </div>
@@ -27,8 +34,15 @@ const CalendarEventOverlay = (props: OverlayProps) => {
 
 export default CalendarEventOverlay;
 
+function sortEntries(entries: EntryInfo[]): EntryInfo[] {
+    return entries.sort((o1, o2) => {
+        const o1T = (o1.end.getTime() - o1.start.getTime()), o2T = (o2.end.getTime() - o2.start.getTime());
+        return (o1T > o2T) ? -1 : 1;
+    });
+}
+
 interface SingleEventProp {
-    dayEvents: CalendarEvent[];
+    dayEvents: EntryInfo[];
     onClick: (event: CalendarEvent) => void;
 }
 
@@ -37,48 +51,13 @@ const SingleEvent = (props: SingleEventProp) => {
         <>
             <div className="flex flex-col w-full h-full relative">
                 {
-                    props.dayEvents.map((event) =>
-                        <CalendarEntry event={event} onClick={props.onClick} />
+                    props.dayEvents.map((info) =>
+                        <React.Fragment key={`eventoverlay_events_${info.event.id}`}>
+                            <CalendarEntry info={info} onClick={props.onClick} />
+                        </React.Fragment>
                     )
                 }
             </div>
         </>
     );
-}
-
-function filterEventsOfWeek(middleOfWeek: Date, events: CalendarEvent[]): CalendarEvent[][] {
-    // oshea-02.08.2024: This is so cursed...
-    // The idea is to take the difference between the middle of the week and the start of the event.
-    // If the difference is small enough, it must be in the same week
-
-    const filtered: CalendarEvent[][] = [];
-    for (let i = 0; i < 7; i++) {
-        filtered.push(Array(0))
-    }
-
-    events.filter((event) => {
-        // oshea-02.08.2024
-        // Todo:
-        //  This doesn't work correctly?
-        const time = Math.abs(middleOfWeek.getTime() - event.start.getTime());
-        const deltaDate = new Date(time).getDate();
-        return (deltaDate <= 3);
-    }).forEach((event) => {
-        const day = event.start.getDay();
-        const index = (day === 0) ? 6 : day - 1;
-        filtered[index].push(event);
-    });
-
-    // Filter the events, so they are rendered correctly later
-    for (let i = 1; i < 7; i++) {
-        filtered[i].sort((a, b) => {
-            const aEventLength = (a.end.getTime() - a.start.getTime());
-            const bEventLength = (b.end.getTime() - b.start.getTime());
-
-            if (aEventLength < bEventLength) return 1;
-            else return -1;
-        });
-    }
-
-    return filtered;
 }
