@@ -1,4 +1,5 @@
-import './App.css'
+import './App.css';
+import Quack from "../public/Duck Quack - Sound Effect (HD).mp3";
 import Header from "./header/components/Header.tsx";
 import {FormEvent, useEffect, useState} from "react";
 import {createEvent, retrieveAllEvents, updateEvent} from "./businesslogic/CalendarAPI.ts";
@@ -7,7 +8,7 @@ import Sidebar from "./sidebar/components/Sidebar.tsx";
 import Calendar from "./calendar/components/Calendar.tsx";
 import EventModal from "./sidebar/components/EventModal.tsx";
 import EventRequestBuilder from "./businesslogic/EventRequestBuilder.ts";
-import Funny, {initAnimation} from './funnies/component/Funnies.tsx';
+import Funny from './funnies/component/Funnies.tsx';
 
 function App() {
     const [calendarDate, setCalendarDate] = useState(new Date()) // State for the main calendar showing the weekly view
@@ -22,13 +23,10 @@ function App() {
     const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
 
     // Funnies :)
-    const [funnyVisible, setFunnyVisible] = useState<boolean>(true);
-    const [funny, setMoreFunnies] = useState([]);
+    const [funnyCounter, setFunnyCounter] = useState<number>(0);
 
     // Fetch events on initial load
     useEffect(() => {
-        initAnimation(() => funny, setMoreFunnies);
-
         const fetchEvents = async () => {
             try {
                 const retrievedEvents = await retrieveAllEvents();
@@ -82,26 +80,8 @@ function App() {
     };
 
     const handleTogglingFunny = () => {
-        if (funnyVisible) {
-            setMoreFunnies([]); // https://imgflip.com/i/8zmky9
-        } else {
-            const amount_of_funnies = 5;
-            const minX = 50, maxX = window.innerWidth - 50;
-            const minY = 50, maxY = window.innerHeight - 50;
-            const newFunny = [];
-            for (let i = 0; i < amount_of_funnies; i++) {
-                const x = (Math.random() < 0.5) ? minX : maxX;
-                const y = (Math.random() < 0.5) ? minY : maxY;
-
-                newFunny.push({x: x, y: y});
-            }
-
-            console.debug("Added an arrmy!");
-            console.log(newFunny);
-            setMoreFunnies(newFunny);
-        }
-
-        setFunnyVisible(!funnyVisible);
+        new Audio(Quack).play();
+        setFunnyCounter(funnyCounter + 1);
     }
 
     const handleEntryClick = (event: CalendarEvent) => {
@@ -129,9 +109,10 @@ function App() {
 
     return (
         <>
-            {(funnyVisible) ?
-                funny.map((d) => <Funny x={d.x} y={d.y}/>) :
-                <></>
+            {
+                (funnyCounter >= 5) ? 
+                <Funny /> :
+                <> {/* https://imgflip.com/i/8zmky9 */ } </>
             }
             <div className="flex flex-col h-svh">
                 <Header onProfileClick={handleTogglingFunny}/>
