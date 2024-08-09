@@ -1,4 +1,4 @@
-import {CalendarEvent} from "../../businesslogic/types.ts";
+import {CalendarEvent, Category} from "../../businesslogic/types.ts";
 import {generateUniqueHexColor} from "../../businesslogic/util/ColorGenerationUtil.ts";
 import { getTimeFormatted } from "../../businesslogic/util/DateUtil.ts";
 
@@ -39,6 +39,30 @@ const CalendarEntry = (props: CalendarEntryProp) => {
             </button>
         </>
     );
+}
+
+interface CatData {
+    cats: Category[];
+}
+
+const CategoryIndicator = (props: CatData) => {
+    if (!props.cats) return <></>
+
+    const wP = 100 / props.cats.length;
+    const colorStr = Array.from(Array(props.cats.length).keys()).map((i) => `${generateUniqueHexColor(props.cats[i].id)} ${i * wP}% ${(i + 1) * wP}%`).join(", ");
+
+    return (
+        <>
+            <div className="w-2 h-full" style={
+                { background: `linear-gradient(to bottom, ${colorStr})` }
+            }>
+            </div>
+        </>
+    );
+}
+
+function calcMinutesFromDate(date: Date) {
+    return date.getHours() * 60 + date.getMinutes();
 }
 
 export default CalendarEntry;
