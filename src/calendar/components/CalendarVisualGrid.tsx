@@ -1,6 +1,6 @@
 import React from "react";
 
-export const HEIGHT = 1000;
+export const HEIGHT = 1500;
 export const ENTRY_HEIGHT = (HEIGHT / 24);
 
 const CalendarVisualGrid = () => {
@@ -13,7 +13,7 @@ const CalendarVisualGrid = () => {
                     Array.from(Array(24).keys())
                         .map(k =>
                             <React.Fragment key={`visgrid_horizontal_${k}`}>
-                                <div className="h-full w-full border-y-[1px] border-black"></div>
+                                <div className={`h full w-full ${k == 0 ? 'border-t-[1px]' : 'border-b-[1px]'} border-black`}></div>
                             </React.Fragment>
                         )
                 }
@@ -25,7 +25,7 @@ const CalendarVisualGrid = () => {
                     Array.from(Array(7).keys())
                         .map(k =>
                             <React.Fragment key={`visgrid_vertical_${k}`}>
-                                <div className="h-full w-full border-x-[1px] border-black"> </div>
+                                <div className={`h-full w-full ${k == 0 ? 'border-l-[1px]' : 'border-r-[1px]'} border-black`}> </div>
                             </React.Fragment>
                         )
                 }
