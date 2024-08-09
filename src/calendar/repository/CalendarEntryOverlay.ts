@@ -12,7 +12,7 @@ export const calcEntriesForWeek = (events: CalendarEvent[], weekDates: Date[]): 
     const infos: EntryInfo[][] = [];
     for (let i = 0; i < 7; i++) { infos.push([]); }
 
-    const seen = [];
+    const seen: number[] = [];
     const weekEvents = filterEventsOfWeek(weekDates, events);
     console.log(weekEvents)
 
@@ -32,7 +32,7 @@ export const calcEntriesForWeek = (events: CalendarEvent[], weekDates: Date[]): 
                 console.log(wE.title, wE.start.getTime(), d, day.start.getTime());
             }
 
-            infos[index].push({event: day.event, start: day.start, end: day.end, isMain: !(day.event.id in seen)});
+            infos[index].push({event: day.event, start: day.start, end: day.end, isMain: !seen.includes(day.event.id)});
             seen.push(day.event.id);
         }
     }
