@@ -13,7 +13,7 @@ const CalendarVisualGrid = () => {
                     Array.from(Array(24).keys())
                         .map(k =>
                             <React.Fragment key={`visgrid_horizontal_${k}`}>
-                                <div className={`h full w-full ${k == 0 ? 'border-t-[1px]' : 'border-b-[1px]'} border-black`}></div>
+                                <div className={`h full w-full ${k == 0 ? 'border-y-[1px]' : 'border-b-[1px]'} border-black`}></div>
                             </React.Fragment>
                         )
                 }
