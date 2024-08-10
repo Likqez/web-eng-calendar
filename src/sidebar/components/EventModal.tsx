@@ -13,11 +13,12 @@ interface ModalProps {
     onClose: () => void;
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
     event?: CalendarEvent | null;
+    edit: boolean;
 }
 
-const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
+const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event, edit}) => {
     const currentDate = new Date();
-    const [editMode, setEditMode] = useState(false);
+    const [editMode, setEditMode] = useState(edit || false);
 
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
@@ -99,6 +100,7 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event}) => {
                             <IoPencil/>
                         </button>
                         <button
+                            hidden={event === null || event.id === null}
                             className="absolute p-1 right-10 top-1.5 rounded-full bg-[rgba(60,64,67,.6)] text-2xl">
                             <IoTrashOutline/>
                         </button>

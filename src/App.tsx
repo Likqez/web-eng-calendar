@@ -21,6 +21,7 @@ function App() {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+    const [editMode, setEditMode] = useState(false);
 
     // Funnies :)
     const [funnyCounter, setFunnyCounter] = useState<number>(0);
@@ -54,7 +55,10 @@ function App() {
 
 
     const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setEditMode(false);
+    }
 
     // Modal Form submit
     const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -140,6 +144,7 @@ function App() {
                             }}
                             onClickCreateEntry={() => {
                                 setSelectedEvent(null);
+                                setEditMode(true);
                                 openModal();
                             }}
                         />
@@ -151,7 +156,7 @@ function App() {
                         onOverlayDoubleClick={(d) => handleCreateViaOverlay(d)}/>
                 </div>
             </div>
-            {isModalOpen && <EventModal event={selectedEvent} onClose={closeModal} onSubmit={handleFormSubmit}/>}
+            {isModalOpen && <EventModal edit={editMode} event={selectedEvent} onClose={closeModal} onSubmit={handleFormSubmit}/>}
         </>
     )
 }
