@@ -167,7 +167,7 @@ function App() {
                         onOverlayDoubleClick={(d) => handleCreateViaOverlay(d)}/>
                 </div>
             </div>
-            {isModalOpen && <EventModal deleteEvent={handleEventDelete} edit={editMode} event={selectedEvent} onClose={closeModal} onSubmit={handleFormSubmit}/>}
+            {isModalOpen && <EventModal deleteEvent={handleEventDelete} edit={editMode} calendarDate={calendarDate} event={selectedEvent} onClose={closeModal} onSubmit={handleFormSubmit}/>}
         </>
     )
 }

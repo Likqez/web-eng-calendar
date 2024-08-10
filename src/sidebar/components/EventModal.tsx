@@ -15,17 +15,18 @@ interface ModalProps {
     event?: CalendarEvent | null;
     edit: boolean;
     deleteEvent: (id: number) => void;
+    calendarDate: Date;
 }
 
-const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event, edit, deleteEvent}) => {
+const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event, edit, deleteEvent, calendarDate}) => {
     const currentDate = new Date();
     const [editMode, setEditMode] = useState(edit || false);
 
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [organizer, setOrganizer] = useState('');
-    const [start, setStart] = useState(getDateFormatted(currentDate));
-    const [end, setEnd] = useState(getDateFormatted(currentDate));
+    const [start, setStart] = useState(getDateFormatted(calendarDate));
+    const [end, setEnd] = useState(getDateFormatted(calendarDate));
 
     currentDate.setMinutes(currentDate.getMinutes() - (currentDate.getMinutes() % 30));
     const [startTime, setStartTime] = useState(getTimeFormatted(currentDate));
