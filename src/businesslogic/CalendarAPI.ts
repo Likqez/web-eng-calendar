@@ -1,6 +1,6 @@
 import {CreateEventRequest, CreateEventResponse, RetrieveEventResponse, UpdateEventRequest} from "./types.ts";
 
-const HOST = "https://dhbw.radicalsimplicity.com/calendar/187187187"
+const HOST = "https://dhbw.radicalsimplicity.com/calendar/2485081"
 
 export async function retrieveEvent(eventId: number): Promise<RetrieveEventResponse> {
     const response = await fetch(`${HOST}/events/${eventId}`);
