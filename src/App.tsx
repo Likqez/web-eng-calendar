@@ -65,7 +65,7 @@ function App() {
             .setTitle(data.get('title') as string)
             .setStart(new Date((data.get('start') as string + 'T' + (data.get('startTime') ? data.get('startTime').toString() : '00:00'))))
             .setEnd(new Date((data.get('end') as string + 'T' + (data.get('endTime') ? data.get('endTime').toString() : '23:59'))))
-            .setAllday(data.get('allday') === 'true')
+            .setAllday(Boolean(data.get('allday') as string))
             .setOrganizer(data.get('organizer') as string)
             .setStatus(data.get('status') as "Free" | "Busy" | "Tentative")
             .setWebpage(data.get('webpage') as string)
