@@ -86,3 +86,17 @@ export const getDateFormatted = (date: Date): string => {
     const d: string = date.getDate().toString();
     return ("0000".substring(0, 4 - y.length) + y) + "-" + ("00".substring(0, 2 - m.length) + m) + "-" + ("00".substring(0, 2 - d.length) + d);
 }
+
+export function calcWeekDates(selectedDate: Date): Date[] {
+    const day = selectedDate.getDay();
+
+    const date = selectedDate.getDate();
+    const weekStartDate = date - ((day == 0) ? 6 : day - 1)
+    const dates = [];
+    for (let i = 0; i < 7; i++) {
+        dates.push(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), weekStartDate + i));
+
+    }
+    return dates;
+
+}

@@ -2,7 +2,7 @@ import './App.css';
 import Quack from "../public/Duck Quack - Sound Effect (HD).mp3";
 import Header from "./header/components/Header.tsx";
 import {FormEvent, useEffect, useState} from "react";
-import {createEvent, retrieveAllEvents, updateEvent} from "./businesslogic/CalendarAPI.ts";
+import {createEvent, deleteEvent, retrieveAllEvents, updateEvent} from "./businesslogic/CalendarAPI.ts";
 import {CalendarEvent, mapToEvent} from "./businesslogic/types.ts";
 import Sidebar from "./sidebar/components/Sidebar.tsx";
 import Calendar from "./calendar/components/Calendar.tsx";
@@ -94,6 +94,14 @@ function App() {
         closeModal();
     };
 
+    const handleEventDelete = (id: number) => {
+        deleteEvent(id).then(() => {
+            console.log("Deleted event", events.find((e) => e.id === id));
+        });
+        setEvents(events.filter((e) => e.id !== id));
+        closeModal();
+    }
+
     const handleTogglingFunny = () => {
         new Audio(Quack).play();
         setFunnyCounter(funnyCounter + 1);
@@ -130,7 +138,10 @@ function App() {
                 <> {/* https://imgflip.com/i/8zmky9 */ } </>
             }
             <div id="funny-bg-container" className="flex flex-col h-svh" style={{ backgroundColor: funnyCounter >= 5 ? colors[colorIndex] : '' }}>
-                <Header onProfileClick={handleTogglingFunny}/>
+                <Header changeCalendarDate={(date) => {setCalendarDate(date); setSideBarCalendarDate(date)}}
+                        calendarDate={calendarDate}
+                        onProfileClick={handleTogglingFunny}
+                />
 
                 <div className="flex flex-row w-screen overflow-auto">
                     <div className="flex-col basis-32 shrink-0 px-2">
@@ -156,7 +167,7 @@ function App() {
                         onOverlayDoubleClick={(d) => handleCreateViaOverlay(d)}/>
                 </div>
             </div>
-            {isModalOpen && <EventModal edit={editMode} event={selectedEvent} onClose={closeModal} onSubmit={handleFormSubmit}/>}
+            {isModalOpen && <EventModal deleteEvent={handleEventDelete} edit={editMode} event={selectedEvent} onClose={closeModal} onSubmit={handleFormSubmit}/>}
         </>
     )
 }

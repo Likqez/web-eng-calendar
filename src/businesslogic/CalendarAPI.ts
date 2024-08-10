@@ -53,5 +53,5 @@ export async function deleteEvent(eventId: number){
     if (!response.ok) {
         throw new Error("Failed to update event");
     }
-    return response.json();
+    return response.status === 204;
 }

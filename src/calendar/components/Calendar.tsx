@@ -4,6 +4,7 @@ import CalendarHeader from './CalendarHeader.tsx';
 import CalendarBody from './CalendarBody.tsx';
 import {useEffect, useRef} from "react";
 import {ENTRY_HEIGHT} from "./CalendarVisualGrid.tsx";
+import {calcWeekDates} from "../../businesslogic/util/DateUtil.ts";
 
 interface CalendarProps {
     events: CalendarEvent[];
@@ -44,17 +45,3 @@ const Calendar = (props: CalendarProps) => {
 }
 
 export default Calendar;
-
-function calcWeekDates(selectedDate: Date): Date[] {
-    const day = selectedDate.getDay();
-
-    const date = selectedDate.getDate();
-    const weekStartDate = date - ((day == 0) ? 6 : day - 1)
-    const dates = [];
-    for (let i = 0; i < 7; i++) {
-        dates.push(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), weekStartDate + i));
-
-    }
-    return dates;
-
-}

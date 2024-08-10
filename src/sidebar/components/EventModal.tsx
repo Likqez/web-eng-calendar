@@ -14,9 +14,10 @@ interface ModalProps {
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
     event?: CalendarEvent | null;
     edit: boolean;
+    deleteEvent: (id: number) => void;
 }
 
-const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event, edit}) => {
+const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event, edit, deleteEvent}) => {
     const currentDate = new Date();
     const [editMode, setEditMode] = useState(edit || false);
 
@@ -39,6 +40,7 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event, edit}) => {
     const [categories, setCategories] = useState([]);
 
     const imageInputRef = React.createRef<HTMLInputElement>();
+    const [imageSize, setImageSize] = useState(0);
 
     // Memoize the header color
     const headerColor = useMemo(() => generateUniqueHexColor(event ? event.id : Math.random() * 100), [event]);
@@ -77,12 +79,12 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event, edit}) => {
         const file = e.target.files?.[0];
         if (file) {
             const sizeInKB = file.size / 1024;
-            if (sizeInKB > 480) throw new Error('Image size should be less than 480KB');
 
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImageurl(reader.result as string);
                 setImageData(reader.result);
+                setImageSize(sizeInKB);
             };
             reader.readAsDataURL(file);
         }
@@ -92,15 +94,22 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event, edit}) => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
 
             <div className="flex-col" style={{maxHeight: 'calc(100vh - 50px)'}}>
-                <div className={`w-[512px] h-32 rounded-t ${imageurl ? 'bg-transparent' : 'bg-gray-500'}`}>
+                <div className={`w-[512px] h-32 rounded-t ${imageurl && imageSize <512 ? 'bg-transparent' : 'bg-gray-500'}`}>
                     <div className="relative text-white">
-                        <button onClick={() => setEditMode(true)}
-                                hidden={editMode}
+                        <button
+                            onClick={() => setEditMode(true)}
+                            hidden={editMode}
                             className="absolute right-20 p-1 top-1.5 rounded-full bg-[rgba(60,64,67,.6)] text-2xl">
                             <IoPencil/>
                         </button>
                         <button
                             hidden={event === null || event.id === null}
+                            onClick={()=> {
+                                if (window.confirm("Are you sure you want to delete this event?")) {
+                                    deleteEvent(event.id);
+                                    onClose();
+                                }
+                            }}
                             className="absolute p-1 right-10 top-1.5 rounded-full bg-[rgba(60,64,67,.6)] text-2xl">
                             <IoTrashOutline/>
                         </button>
@@ -113,9 +122,11 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event, edit}) => {
                     {!imageurl && (
                         <div className="h-full content-center text-center text-2xl font-semibold text-white">No Image
                             Found</div>)}
-                    {imageurl && imageurl !== "REMOVE" && (
+                    {imageurl && imageSize < 512 && imageurl !== "REMOVE" && (
                         <img src={imageurl} alt="Image" className="h-full w-full object-cover rounded"/>
                     )}
+                    {imageurl && imageSize >= 512 && (
+                        <div className="h-full content-center text-center text-2xl font-semibold text-white">Image too Large</div>)}
                 </div>
 
 
@@ -302,6 +313,7 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event, edit}) => {
                                 onChange={handleImageChange}
                                 className="w-2/3 px-3 py-2 focus:outline-none transition duration-200"
                             />
+                            <div hidden={!editMode} className="text-gray-500 text-xs">max 512kB</div>
                             <button hidden={!editMode} disabled={!editMode} type="button" onClick={() => {
                                 setImageData('REMOVE')
                                 setImageurl(null);
