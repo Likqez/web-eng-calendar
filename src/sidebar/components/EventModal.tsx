@@ -294,17 +294,32 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event, edit, delet
                                     value={webpage}
                                     name="webpage"
                                     maxLength={100}
-                                    disabled={!editMode}
+                                    hidden={!editMode}
                                     placeholder='Website'
                                     onChange={(e) => setWebpage(e.target.value)}
                                     className={`text-sm w-full px-3 focus:py-2 ${webpage ? 'py-2' : ''} hover:bg-gray-100 focus:border-b-2 focus:outline-none focus:border-b-blue-500 transition duration-200`}
                                 />
+                                {webpage && !editMode && (
+                                    <a href={webpage}
+                                       className={`text-sm w-full px-3 py-2 transition duration-200 text-blue-500`}>{webpage}</a>
+                                )}
+
+                                {!webpage && !editMode && (
+                                    // stupid way to get exactly same behavior as above but works
+                                    <input
+                                        type="text"
+                                        disabled={true}
+                                        placeholder='Website'
+                                        className={`text-sm w-full px-3 focus:py-2 ${webpage ? 'py-2' : ''} hover:bg-gray-100 focus:border-b-2 focus:outline-none focus:border-b-blue-500 transition duration-200`}
+                                    />
+                                )}
+
                             </div>
                         </div>
 
                         <div className="mb-2 w-full h-0 border-b border-gray-300" hidden={!editMode}></div>
 
-                        <div className="mb-2 flex items-center justify-between" >
+                        <div className="mb-2 flex items-center justify-between">
                             {editMode && (<label className="block text-gray-700">Header:</label>)}
                             <input
                                 ref={imageInputRef}
@@ -330,15 +345,6 @@ const EventModal: React.FC<ModalProps> = ({onClose, onSubmit, event, edit, delet
                         {/* Hidden input fields to pass the values of the state using the Form*/}
                         <input type="number" name="id" hidden value={event ? event.id : ''} readOnly/>
                         <input type="text" name="imageData" hidden value={imageData} readOnly/>
-                        {/*<div className="mb-2">*/}
-                        {/*    <label className="block text-gray-700">Categories</label>*/}
-                        {/*    <input*/}
-                        {/*        type="text"*/}
-                        {/*        value={categories.map(cat => cat.name).join(', ')}*/}
-                        {/*        readOnly*/}
-                        {/*        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"*/}
-                        {/*    />*/}
-                        {/*</div>*/}
 
                         <div className="mb-2 w-full h-0 border-b border-gray-300"></div>
                         <div className="flex justify-end">
